@@ -3,13 +3,13 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     // Create a particle at a specific position, with a mass and radius
-    Particle* p = new Particle(ofVec3f(0, 500, 0), 1.0f, 10.0f);  // Particle at position (0,500,0) with mass 1 and radius 10
+    Particle* p = new Particle(ofVec3f(100, 100, 0), 1.0f, 10.0f);  // Particle at position (0,500,0) with mass 1 and radius 10
 
     // Add the particle to the list of particles
     particles.push_back(p);
 
     // Create gravity force generator (gravity pointing downward)
-    ParticleGravity* gravity = new ParticleGravity(ofVec3f(0, -9.81f, 0));
+    ParticleGravity* gravity = new ParticleGravity(ofVec3f(0, 9.81f, 0));
 
     // Add the particle and gravity generator to the force registry
     forceRegistry.add(p, gravity);
@@ -17,7 +17,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    float deltaTime = ofGetLastFrameTime(); // Get time between frames
+    float deltaTime = ofGetLastFrameTime() * 3; // Get time between frames
 
     // Update forces (apply gravity)
     forceRegistry.updateForces(deltaTime);
@@ -96,10 +96,12 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
-void exit() {
-	// Clean up memory
+//--------------------------------------------------------------
+void ofApp::exit() {
+	// Clean up memory by deleting particles and force generators
 	for (Particle* p : particles) {
 		delete p;
 	}
 	particles.clear();
+	forceRegistry.clear();
 }

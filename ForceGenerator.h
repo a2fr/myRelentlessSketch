@@ -1,19 +1,13 @@
-#pragma once
+#ifndef FORCE_GENERATOR_H
+#define FORCE_GENERATOR_H
 
 #include "Particle.h"
-#include <vector>
 
-// Forward declaration of Particle class
-class Particle;
-
-// Abstract base class for force generators
 class ForceGenerator {
 public:
-    virtual void applyForce(Particle& particle, float duration) = 0;
-    virtual ~ForceGenerator() = default;
+    virtual void applyForce(Particle* particle, float duration) = 0;
 };
 
-// Registry to manage force generators and their associated particles
 class ForceRegistry {
 public:
     struct ForceRegistration {
@@ -21,11 +15,36 @@ public:
         ForceGenerator* generator;
     };
 
-    void add(Particle* particle, ForceGenerator* generator);
-    void remove(Particle* particle, ForceGenerator* generator);
-    void clear();
-    void updateForces(float duration);
+    typedef std::vector<ForceRegistration> Registry;
+    Registry registry;
 
-private:
-    std::vector<ForceRegistration> registry;
+    void add(Particle* particle, ForceGenerator* generator) {
+        ForceRegistration registration;
+        registration.particle = particle;
+        registration.generator = generator;
+        registry.push_back(registration);
+    }
+
+    void remove(Particle* particle, ForceGenerator* generator) {
+        Registry::iterator i = registry.begin();
+        for (; i != registry.end(); i++) {
+            if (i->particle == particle && i->generator == generator) {
+                registry.erase(i);
+                return;
+            }
+        }
+    }
+
+    void clear() {
+        registry.clear();
+    }
+
+    void updateForces(float duration) {
+        Registry::iterator i = registry.begin();
+        for (; i != registry.end(); i++) {
+            i->generator->applyForce(i->particle, duration);
+        }
+    }
 };
+
+#endif // FORCE_GENERATOR_H
