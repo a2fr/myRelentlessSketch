@@ -1,9 +1,16 @@
 #pragma once
 
 #include "ofMain.h"
-#include "..\Particle.h"
-#include "..\ForceGenerator.h"
-#include "..\ParticleGravity.h"
+#include "../Vector.h"
+#include "../Particle.h"
+#include "../Button.h"
+#include "../ParticleForceRegistry.h"
+#include "../ParticleGravity.h"
+
+enum GameState {
+	MENU,
+	GAME
+};
 
 class ofApp : public ofBaseApp{
 
@@ -23,11 +30,28 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+
+		void drawMenu();
+		void drawGame();
+		void drawNames();
+		void updateGame();
+		void updateMenu();
 		
 		// Exit
-		void exit();
+		/*void exit();*/
 
 private:
+
+	GameState currentState;
+	Button* startButton;
+	Button* returnButton;
+	ofTrueTypeFont titleFont;
+	ofTrueTypeFont m_creditFont;
+
+	Particle m_particule;
+	Vector m_initialPos;
+
 	std::vector<Particle*> particles;    // List of particles
-	ForceRegistry forceRegistry;         // Force registry to apply forces to particles
+	ParticleForceRegistry forceRegistry;         // Force registry to apply forces to particles
+	ParticleGravity* gravity;
 };

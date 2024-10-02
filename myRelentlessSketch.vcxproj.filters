@@ -7,9 +7,11 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="ForceGenerator.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleGravity.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="ParticleForceRegistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -20,9 +22,12 @@
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="ForceGenerator.h" />
+    <ClInclude Include="ParticleForceGenerator.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleGravity.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="Vector.h" />
+    <ClInclude Include="ParticleForceRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

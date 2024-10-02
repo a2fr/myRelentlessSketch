@@ -1,26 +1,20 @@
+#ifndef PARTICLE_GRAVITY_H
+#define PARTICLE_GRAVITY_H
+
 #pragma once
-#include "ForceGenerator.h"
+
+#include "ParticleForceGenerator.h"
 #include "Particle.h"
+#include "Vector.h"
 
-class ParticleGravity : public ForceGenerator {
+class ParticleGravity : public ParticleForceGenerator {
 public:
-    // Constructor to initialize gravity vector
-    ParticleGravity(const ofVec3f& gravity) : gravity(gravity) {}
+    ParticleGravity(const Vector& gravity = Vector(0,9.81,0)) : gravity(gravity) {}
 
-    // Apply the gravitational force to the particle
-    virtual void applyForce(Particle* particle, float duration) {
-        // If the particle has infinite mass (zero mass), do not apply force
-        if (particle->getMass() <= 0.0f) {
-            return;
-        }
-
-        // F = m * g (force = mass * gravity)
-        ofVec3f force = gravity * particle->getMass();
-
-        // Apply the force to the particle
-        particle->addForce(force);
-    }
+    virtual void updateForce(Particle* particle, float duration);
 
 private:
-    ofVec3f gravity;  // Gravitational acceleration vector (e.g., (0, -9.81, 0))
+    Vector gravity;
 };
+
+#endif

@@ -1,21 +1,47 @@
-#pragma once
+#ifndef Particule_h
+#define Particule_h
+
+#include "Vector.h"
 #include "ofMain.h"
 
-class Particle {
+class Particle
+{
+private:
+    float m_width;
+    Vector m_position;
+    Vector m_velocity;
+    Vector m_acceleration;
+    float m_inverseMasse;
+    ofColor m_color;
+    Vector m_accumForce;
+
+
+//  float restitution; // Coefficient de restitution (pour les collisions)
+
 public:
-    ofVec3f position;
-    ofVec3f velocity;
-    ofVec3f acceleration;
-    float inverseMass; // Inverse of the mass (1/mass)
-    float radius;
-    float restitution; // Coefficient de restitution (pour les collisions)
+    Particle(Vector pos = Vector(0, 0, 0), float w = 10, float Im = 1.0f, ofColor color = ofColor::blue, Vector velocity = Vector(), Vector a = Vector()) :
+        m_width(w), m_position(pos), m_velocity(velocity), m_acceleration(a), m_inverseMasse(Im), m_color(color) {};
+    ~Particle() {}
 
-    Particle();
-    Particle(ofVec3f pos, float mass, float radius);
+/* ----------------------------- Getteurs & Setteurs ----------------------------- */
+    void setVelocity(Vector v) { m_velocity = v; };
+    Vector getVelocity() { return m_velocity; };
 
-    void addForce(const ofVec3f& force);
-    void update(float deltaTime);
-    void draw();
+    Vector& getPosition() { return m_position; };
+    void setPosition(Vector v) { m_position = v; };
 
-	float getMass() const;
+    void setColor(ofColor c) { m_color = c; };
+
+    float getInverseMasse() const { return m_inverseMasse; };
+    void setInverseMasse(float inverseMasse) { m_inverseMasse = inverseMasse; };
+
+/* ----------------------------- ----------------------------- ----------------------------- */
+    void update(float deltaTime); // Modifie pour inclure le temps ecoule
+    void draw() const;
+    void addForce(const Vector& force);
+
+    void clearAccum();
+
 };
+
+#endif // Particule_h

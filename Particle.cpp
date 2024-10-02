@@ -1,28 +1,26 @@
 #include "Particle.h"
 
-Particle::Particle()
-    : position(0, 0, 0), velocity(0, 0, 0), acceleration(0, 0, 0), inverseMass(0), radius(0), restitution(0) {}
 
-Particle::Particle(ofVec3f pos, float mass, float radius)
-    : position(pos), velocity(0, 0, 0), acceleration(0, 0, 0), inverseMass(mass > 0 ? 1.0f / mass : 0), radius(radius), restitution(0) {}
+void Particle::update(float deltaTime)
+{
+     m_acceleration = m_accumForce * m_inverseMasse;
 
-void Particle::addForce(const ofVec3f& force) {
-    if (inverseMass > 0) {
-        acceleration += force * inverseMass;
-    }
+     m_velocity += m_acceleration * deltaTime;
+     m_position += m_velocity * deltaTime;
 }
 
-void Particle::update(float deltaTime) {
-    velocity += acceleration * deltaTime;
-    position += velocity * deltaTime;
-    acceleration.set(0, 0, 0); // Reset acceleration after each update
+void Particle::draw() const
+{
+    ofSetColor(m_color);
+    ofFill();
+    ofDrawSphere(m_position.getGlmVec(), m_width);
 }
 
-void Particle::draw() {
-    ofDrawSphere(position, radius);
+void Particle::addForce(const Vector& force) {
+    m_accumForce += force;
 }
 
-// Get mass function
-float Particle::getMass() const {
-	return inverseMass > 0 ? 1.0f / inverseMass : 0;
+void Particle::clearAccum()
+{
+    m_accumForce = Vector(0, 0, 0);
 }
