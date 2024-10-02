@@ -15,10 +15,6 @@ void ofApp::setup(){
     Particle* p = new Particle(Vector(100, 100, 0), 10, 10);
     //// Add the particle to the list of particles
     particles.push_back(p);
-    // Create gravity force generator (gravity pointing downward)
-    gravity = new ParticleGravity();
-    // Add the particle and gravity generator to the force registry
-    forceRegistry.add(p, gravity);
 
 }
 
@@ -42,9 +38,14 @@ void ofApp::updateMenu() {
 
 void ofApp::updateGame() {
     float deltaTime = ofGetLastFrameTime();
-        
+    for (Particle* p : particles) {
+        // Add the particle and gravity generator to the force registry
+        forceRegistry.add(p, gravity);
+    }
+
     // Update forces (apply gravity)
     forceRegistry.updateForces(deltaTime);
+    forceRegistry.clear();
 
     // Update each particle's position based on the applied forces
     for (Particle* p : particles) {

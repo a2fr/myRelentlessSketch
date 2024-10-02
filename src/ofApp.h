@@ -53,5 +53,5 @@ private:
 
 	std::vector<Particle*> particles;    // List of particles
 	ParticleForceRegistry forceRegistry;         // Force registry to apply forces to particles
-	ParticleGravity* gravity;
+	ParticleGravity* gravity = new ParticleGravity();
 };
