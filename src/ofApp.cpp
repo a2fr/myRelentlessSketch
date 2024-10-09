@@ -41,6 +41,7 @@ void ofApp::updateGame() {
     for (Particle* p : particles) {
         // Add the particle and gravity generator to the force registry
         forceRegistry.add(p, gravity);
+        forceRegistry.add(p, friction);
     }
 
     // Update forces (apply gravity)

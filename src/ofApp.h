@@ -6,6 +6,7 @@
 #include "../Button.h"
 #include "../ParticleForceRegistry.h"
 #include "../ParticleGravity.h"
+#include "../Friction.h"
 
 enum GameState {
 	MENU,
@@ -54,4 +55,5 @@ private:
 	std::vector<Particle*> particles;    // List of particles
 	ParticleForceRegistry forceRegistry;         // Force registry to apply forces to particles
 	ParticleGravity* gravity = new ParticleGravity();
+	Friction* friction = new Friction();
 };
