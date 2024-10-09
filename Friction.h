@@ -7,8 +7,8 @@ public:
         gravity = Vector(0, 9.81, 0);
         Uk = 0.7;
         Us = 0.8;
-        K1 = 1;
-        K2 = 0.8;
+        K1 = 0.25;
+        K2 = 0.05;
     }
 
     virtual void updateForce(Particle* particle, float duration);

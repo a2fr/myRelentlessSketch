@@ -12,7 +12,7 @@ void ofApp::setup(){
     returnButton = new Button("RETURN", ofRectangle(ofGetWidth() - 120, 10, 100, 25), false);
 
     // Create a particle at a specific position, with a mass and radius
-    Particle* p = new Particle(Vector(100, 100, 0), 10, 10);
+    Particle* p = new Particle(Vector(100, 100, 0), 10, 20);
     //// Add the particle to the list of particles
     particles.push_back(p);
 
