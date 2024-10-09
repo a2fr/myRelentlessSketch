@@ -16,6 +16,8 @@ void ofApp::setup(){
     //// Add the particle to the list of particles
     particles.push_back(p);
 
+    ground = new Ground(50, ofColor(255,255,255));
+
 }
 
 //--------------------------------------------------------------
@@ -82,7 +84,7 @@ void ofApp::drawMenu() {
 
 void ofApp::drawGame() {
     returnButton->Draw();
-
+    ground->Draw();
     // Draw each particle
     for (Particle* p : particles) {
         p->draw();
@@ -155,7 +157,7 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
+    ground->resize();
 }
 
 //--------------------------------------------------------------

@@ -6,6 +6,7 @@
 #include "../Button.h"
 #include "../ParticleForceRegistry.h"
 #include "../ParticleGravity.h"
+#include "../Ground.h"
 
 enum GameState {
 	MENU,
@@ -47,6 +48,8 @@ private:
 	Button* returnButton;
 	ofTrueTypeFont titleFont;
 	ofTrueTypeFont m_creditFont;
+
+	Ground* ground;
 
 	Particle m_particule;
 	Vector m_initialPos;
