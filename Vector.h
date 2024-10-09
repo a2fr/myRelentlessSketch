@@ -26,6 +26,7 @@ public:
     double getNorme() const;
     double getNormeAuCarre() const;
     void normalize();
+    Vector getNormalize();
 
     void print(std::ostream& flux) const;
     void afficher() const;

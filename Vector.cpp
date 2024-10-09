@@ -26,6 +26,13 @@ void Vector::normalize()
     }
 }
 
+Vector Vector::getNormalize()
+{
+    Vector* copy = this;
+    copy->normalize();
+    return *copy;
+}
+
 void Vector::print(std::ostream& flux) const
 {
     flux << "(" << x << ", " << y << ", " << z << ")";
