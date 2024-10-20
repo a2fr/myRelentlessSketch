@@ -53,17 +53,57 @@ void CollisionSystem::enforceSteelRodConstraint(Particle& p1, Particle& p2, floa
     }
 }
 
-void CollisionSystem::checkForGroundCollision(Particle& p, float groundY, float dynamicFrictionCoeff, float normalForce) {
-    if (p.getPosition().getY() + p.getWidth() >= groundY) {
-        // Collision with the ground
-        p.setPosition(Vector(p.getPosition().getX(), groundY - p.getWidth(), p.getPosition().getZ()));
+void CollisionSystem::checkForGroundCollision(Particle& p, std::vector<Vector> groundPoints, float dynamicFrictionCoeff, float normalForce) {
+    // Trouver entre quels points se trouve la particule. Décider si elle est au dessus ou en dessous la droite formée par les deux points.
+    int i = 0;
+    while (groundPoints[i].x < p.getPosition().x) {
+        i++;
+        if (i >= groundPoints.size()) {
+            break;
+        }
+    }
+    
+    if (i == 0) { // Collision avec le mur de gauche
+        // Collision with the left wall
+        p.setPosition(Vector(p.getPosition().getX() + p.getWidth(), p.getPosition().y, p.getPosition().z));
 
-		// Nullify the vertical velocity
-		p.setVelocity(Vector(p.getVelocity().getX(), 0, p.getVelocity().getZ()));
+        // Nullify the vertical velocity
+        p.setVelocity(Vector(-p.getVelocity().getX(), p.getVelocity().getY(), p.getVelocity().getZ()));
 
-        // Apply horizontal friction
-        float frictionForce = -p.getVelocity().getX() * dynamicFrictionCoeff * normalForce;
+        // Apply Vertical friction
+        float frictionForce = -p.getVelocity().getY() * dynamicFrictionCoeff * normalForce;
         p.addForce(Vector(frictionForce, 0, 0));
+        return;
+    }
+    else if (p.getPosition().x >= ofGetWidth()) { // Collision avec le mur de droite
+        // Collision with the right wall
+        p.setPosition(Vector(p.getPosition().getX() - p.getWidth(), p.getPosition().y, p.getPosition().z));
+
+        // Nullify the vertical velocity
+        p.setVelocity(Vector(-p.getVelocity().getX(), p.getVelocity().getY(), p.getVelocity().getZ()));
+
+        // Apply Vertical friction
+        float frictionForce = -p.getVelocity().getY() * dynamicFrictionCoeff * normalForce;
+        p.addForce(Vector(frictionForce, 0, 0));
+        return;
+    }
+    else { // Peut être collision avec le sol
+        // Trouver la hauteur du terrain sur la portion i-1, i.
+        float a = (groundPoints[i].y - groundPoints[i - 1].y) / (groundPoints[i].x - groundPoints[i - 1].x);
+        float b = groundPoints[i].y - a * groundPoints[i].x;
+        float groundY = a * p.getPosition().x + b;
+
+        if (p.getPosition().getY() + p.getWidth() >= groundY) {
+            // Collision with the ground
+            p.setPosition(Vector(p.getPosition().getX(), groundY - p.getWidth(), p.getPosition().getZ()));
+
+            // Nullify the vertical velocity
+            p.setVelocity(Vector(p.getVelocity().getX(), 0, p.getVelocity().getZ()));
+
+            // Apply horizontal friction
+            float frictionForce = -p.getVelocity().getX() * dynamicFrictionCoeff * normalForce;
+            p.addForce(Vector(frictionForce, 0, 0));
+        }
     }
 }
 
@@ -74,6 +114,14 @@ void CollisionSystem::detectAndResolveCollisions(std::vector<Particle*>& particl
 
 	Vector gravityForce = gravity->getGravity();
 
+    std::vector<Vector> groundPoints = {
+        Vector(0, ofGetHeight() * 0.75f, 0),
+        Vector(ofGetWidth() * 0.25f, ofGetHeight() * 0.65f, 0),
+        Vector(ofGetWidth() * 0.5f, ofGetHeight() * 0.75f, 0),
+        Vector(ofGetWidth() * 0.75f, ofGetHeight() * 0.65f, 0),
+        Vector(ofGetWidth(), ofGetHeight() * 0.75f, 0)
+    };
+
     for (size_t i = 0; i < particles.size(); ++i) {
         for (size_t j = i + 1; j < particles.size(); ++j) {
             if (checkForCollision(*particles[i], *particles[j])) {
@@ -81,7 +129,8 @@ void CollisionSystem::detectAndResolveCollisions(std::vector<Particle*>& particl
             }
         }
 
+
         // Check for ground collision
-        checkForGroundCollision(*particles[i], groundY, dynamicFrictionCoeff, normalForce);
+        checkForGroundCollision(*particles[i], groundPoints, dynamicFrictionCoeff, normalForce);
     }
 }

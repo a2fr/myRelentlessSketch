@@ -106,6 +106,7 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="MyBlob.cpp" />
     <ClCompile Include="ParticleFriction.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleForceRegistry.cpp" />
@@ -115,10 +116,12 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="CollisionSystem.h" />
+    <ClInclude Include="MyBlob.h" />
     <ClInclude Include="ParticleFriction.h" />
     <ClInclude Include="ParticleForceGenerator.h" />
     <ClInclude Include="Particle.h" />
@@ -128,6 +131,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

@@ -11,9 +11,6 @@ void Player::handleInput() {
         setVelocity(getVelocity() + Vector(1, 0, 0));
     }
     if (ofGetKeyPressed(OF_KEY_UP)) {
-        setVelocity(getVelocity() + Vector(0, -1, 0));
-    }
-    if (ofGetKeyPressed(OF_KEY_DOWN)) {
-        setVelocity(getVelocity() + Vector(0, 1, 0));
+        setVelocity(getVelocity() + Vector(0, -2, 0));
     }
 }

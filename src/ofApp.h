@@ -8,6 +8,10 @@
 #include "../ParticleSpring.h"
 #include "../CollisionSystem.h"
 #include "../Player.h"
+#include "../World.h"
+#include "../MyBlob.h"
+
+
 
 enum GameState {
     MENU,
@@ -57,13 +61,7 @@ private:
 
     Vector m_initialPos;
 
-    std::vector<Particle*> particles;    // List of particles
-    ParticleForceRegistry forceRegistry; // Force registry to apply forces to particles
-    ParticleGravity* gravity;
-    ParticleSpring* springRed;
-	//ParticleSpring* springBlue;
-    ParticleFriction* friction;
-
-    CollisionSystem collisionSystem;
+    World world;
+    MyBlob blob;
     /*Ground ground;*/
 };
