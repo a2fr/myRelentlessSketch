@@ -25,7 +25,7 @@ public:
     // Methodes
     double getNorme() const;
     double getNormeAuCarre() const;
-    void normalize();
+    Vector normalize() const;
 
     void print(std::ostream& flux) const;
     void afficher() const;
@@ -50,6 +50,7 @@ Vector operator-(const Vector& v1, const Vector& v2);
 Vector operator*(Vector const& v1, Vector const& v2);
 Vector operator*(const Vector& vec, double num);
 Vector operator/(const Vector& vec, double num);
+Vector operator-(const Vector& vec);
 bool operator==(const Vector& v1, const Vector& v2);
 std::ostream& operator<<(std::ostream& flux, const Vector& v);
 

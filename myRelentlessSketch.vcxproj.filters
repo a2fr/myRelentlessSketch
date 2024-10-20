@@ -12,6 +12,10 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="ParticleForceRegistry.cpp" />
+    <ClCompile Include="ParticleFriction.cpp" />
+    <ClCompile Include="ParticleSpring.cpp" />
+    <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -28,6 +32,10 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="ParticleForceRegistry.h" />
+    <ClInclude Include="ParticleFriction.h" />
+    <ClInclude Include="ParticleSpring.h" />
+    <ClInclude Include="CollisionSystem.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

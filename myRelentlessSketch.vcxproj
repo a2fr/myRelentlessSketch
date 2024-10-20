@@ -105,19 +105,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="ParticleFriction.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleForceRegistry.cpp" />
     <ClCompile Include="ParticleGravity.cpp" />
+    <ClCompile Include="ParticleSpring.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="CollisionSystem.h" />
+    <ClInclude Include="ParticleFriction.h" />
     <ClInclude Include="ParticleForceGenerator.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleForceRegistry.h" />
     <ClInclude Include="ParticleGravity.h" />
+    <ClInclude Include="ParticleSpring.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
