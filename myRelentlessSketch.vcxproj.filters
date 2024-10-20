@@ -13,6 +13,8 @@
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="ParticleForceRegistry.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="MyBlob.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -30,6 +32,8 @@
     <ClInclude Include="Vector.h" />
     <ClInclude Include="ParticleForceRegistry.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="MyBlob.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

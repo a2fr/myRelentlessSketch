@@ -11,12 +11,14 @@ void ofApp::setup(){
     startButton = new Button("START", ofRectangle(ofGetWidth() / 2 - 100, ofGetHeight() / 2 + 50, 200, 50), false);
     returnButton = new Button("RETURN", ofRectangle(ofGetWidth() - 120, 10, 100, 25), false);
 
+    ground = new Ground(50, ofColor(255,255,255));
+
     // Create a particle at a specific position, with a mass and radius
     Particle* p = new Particle(Vector(100, 100, 0), 10, 10);
-    //// Add the particle to the list of particles
+    // Add the particle to the list of particles
     particles.push_back(p);
 
-    ground = new Ground(50, ofColor(255,255,255));
+    blob = MyBlob();
 
 }
 
@@ -55,6 +57,8 @@ void ofApp::updateGame() {
         p->clearAccum();
     }
 
+    blob.update(deltaTime);
+
 }
 
 //--------------------------------------------------------------
@@ -89,6 +93,8 @@ void ofApp::drawGame() {
     for (Particle* p : particles) {
         p->draw();
     }
+
+    blob.draw();
 }
 
 void ofApp::drawNames() {
@@ -101,11 +107,9 @@ void ofApp::drawNames() {
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    //if (key == ' ') {
-    //    Particle* p = new Particle(Vector(ofRandomWidth(), ofRandomHeight(), 0), ofRandom(0.5f, 2.0f), ofRandom(5, 20));
-    //    particles.push_back(p);
-    //    forceRegistry.add(p, new ParticleGravity(ofVec3f(0, -9.81f, 0)));  // Add gravity to new particle
-    //}
+    if (key == ' ') {
+        blob.addParticle(); 
+    }
 }
 
 //--------------------------------------------------------------
@@ -179,3 +183,9 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 //	particles.clear();
 //	forceRegistry.clear();
 //}
+
+
+
+
+
+
