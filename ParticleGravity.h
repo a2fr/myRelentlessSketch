@@ -4,17 +4,19 @@
 #pragma once
 
 #include "ParticleForceGenerator.h"
-#include "Particle.h"
-#include "Vector.h"
 
 class ParticleGravity : public ParticleForceGenerator {
+	Vector gravity; // Gravité
+
+	// Constructeur
 public:
-    ParticleGravity(const Vector& gravity = Vector(0,9.81,0)) : gravity(gravity) {}
+	ParticleGravity(const Vector& gravity);
 
-    virtual void updateForce(Particle* particle, float duration);
+	// Applique la force de gravité à la particule
+	virtual void updateForce(Particle* particle, float duration);
 
-private:
-    Vector gravity;
+	// Get the vector of gravity
+	Vector getGravity() const;
 };
 
 #endif

@@ -16,14 +16,12 @@ double Vector::getNormeAuCarre() const
     return pow(x, 2) + pow(y, 2) + pow(z, 2);
 }
 
-void Vector::normalize()
-{
-    double norme = getNorme();
-    if (norme != 0) {
-        x /= norme;
-        y /= norme;
-        z /= norme;
+Vector Vector::normalize() const {
+    float norme = getNorme();
+    if (norme == 0) {
+        return Vector(0, 0, 0); // Retourne un vecteur nul si la norme est zéro
     }
+    return Vector(x / norme, y / norme, z / norme);
 }
 
 void Vector::print(std::ostream& flux) const
@@ -116,6 +114,12 @@ Vector operator/(const Vector& vec, double num)
     Vector copie(vec);
     copie /= num;
     return copie;
+}
+
+// Unary negation operator
+Vector operator-(const Vector& vec)
+{
+    return Vector(-vec.x, -vec.y, -vec.z);
 }
 
 bool operator==(const Vector& v1, const Vector& v2)

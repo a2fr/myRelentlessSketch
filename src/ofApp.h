@@ -1,62 +1,69 @@
 #pragma once
 
 #include "ofMain.h"
-#include "../Vector.h"
-#include "../Particle.h"
 #include "../Button.h"
 #include "../ParticleForceRegistry.h"
 #include "../ParticleGravity.h"
-#include "../Ground.h"
-#include "../MyBlob.h"
+#include "../ParticleFriction.h"
+#include "../ParticleSpring.h"
+#include "../CollisionSystem.h"
+#include "../Player.h"
 
 enum GameState {
-	MENU,
-	GAME
+    MENU,
+    GAME
 };
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp {
 
-	public:
-		void setup();
-		void update();
-		void draw();
+public:
+    void setup();
+    void update();
+    void draw();
 
-		void keyPressed(int key);
-		void keyReleased(int key);
-		void mouseMoved(int x, int y );
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void mouseEntered(int x, int y);
-		void mouseExited(int x, int y);
-		void windowResized(int w, int h);
-		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
+    void keyPressed(int key);
+    void keyReleased(int key);
+    void mouseMoved(int x, int y);
+    void mouseDragged(int x, int y, int button);
 
-		void drawMenu();
-		void drawGame();
-		void drawNames();
-		void updateGame();
-		void updateMenu();
-		
-		// Exit
-		/*void exit();*/
+	void resetGame();
+
+    void mousePressed(int x, int y, int button);
+    void mouseReleased(int x, int y, int button);
+    void mouseEntered(int x, int y);
+    void mouseExited(int x, int y);
+    void windowResized(int w, int h);
+    void dragEvent(ofDragInfo dragInfo);
+    void gotMessage(ofMessage msg);
+
+    void drawMenu();
+    void drawGame();
+    void drawNames();
+    void updateGame();
+    void updateMenu();
 
 private:
+    GameState currentState;
+    Button* startButton;
+    Button* returnButton;
+    ofTrueTypeFont titleFont;
+    ofTrueTypeFont m_creditFont;
 
-	GameState currentState;
-	Button* startButton;
-	Button* returnButton;
-	ofTrueTypeFont titleFont;
-	ofTrueTypeFont m_creditFont;
+    Particle* particleBlue;
+    Particle* particleRed;
+    Particle* particleGreen;
+    Particle* particleWhite;
+	Player* player;
 
-	Ground* ground;
+    Vector m_initialPos;
 
-	Particle m_particule;
-	Vector m_initialPos;
+    std::vector<Particle*> particles;    // List of particles
+    ParticleForceRegistry forceRegistry; // Force registry to apply forces to particles
+    ParticleGravity* gravity;
+    ParticleSpring* springRed;
+	//ParticleSpring* springBlue;
+    ParticleFriction* friction;
 
-	std::vector<Particle*> particles;    // List of particles
-	ParticleForceRegistry forceRegistry;         // Force registry to apply forces to particles
-	ParticleGravity* gravity = new ParticleGravity();
-	MyBlob blob;
+    CollisionSystem collisionSystem;
+    /*Ground ground;*/
 };
