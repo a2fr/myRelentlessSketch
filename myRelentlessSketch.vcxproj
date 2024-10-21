@@ -106,6 +106,7 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="Ground.cpp" />
     <ClCompile Include="MyBlob.cpp" />
     <ClCompile Include="ParticleFriction.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -121,6 +122,7 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="CollisionSystem.h" />
+    <ClInclude Include="Ground.h" />
     <ClInclude Include="MyBlob.h" />
     <ClInclude Include="ParticleFriction.h" />
     <ClInclude Include="ParticleForceGenerator.h" />

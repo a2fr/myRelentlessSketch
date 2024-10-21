@@ -18,6 +18,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="MyBlob.cpp" />
+    <ClCompile Include="Ground.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -40,6 +41,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="MyBlob.h" />
+    <ClInclude Include="Ground.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

@@ -37,7 +37,7 @@ private:
     // Initialize friction force generator
     ParticleFriction* friction;
     float staticFrictionCoeff = 0.1f; 
-    float dynamicFrictionCoeff = 0.001f;
+    float dynamicFrictionCoeff = 0.01f;
     float normalForce = 9.81f;
     float k1 = 0.4f;
     float k2 = 0.2f;

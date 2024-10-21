@@ -76,12 +76,11 @@ void CollisionSystem::checkForGroundCollision(Particle& p, std::vector<Vector> g
             break;
         }
     }
-   
 
     if (i == 0) { // Collision avec le mur de gauche
         // Collision with the left wall
         p.setPosition(Vector(p.getPosition().getX() + p.getWidth(), p.getPosition().y, p.getPosition().z));
-
+        //Impulsions
         p.setVelocity(Vector(-p.getVelocity().getX(), p.getVelocity().getY(), p.getVelocity().getZ()));
 
         return;
@@ -90,22 +89,31 @@ void CollisionSystem::checkForGroundCollision(Particle& p, std::vector<Vector> g
         // Collision with the right wall
         p.setPosition(Vector(p.getPosition().getX() - p.getWidth(), p.getPosition().y, p.getPosition().z));
 
-        // Nullify the vertical velocity
+        //Impulsions
         p.setVelocity(Vector(-p.getVelocity().getX(), p.getVelocity().getY(), p.getVelocity().getZ()));
         return;
     }
-    else { // Peut être collision avec le sol
+    else { // collision avec le sol
         // Trouver la hauteur du terrain sur la portion i-1, i.
-        float a = (groundPoints[i].y - groundPoints[i - 1].y) / (groundPoints[i].x - groundPoints[i - 1].x);
+        float deltaX = groundPoints[i].x - groundPoints[i - 1].x;
+        float deltaY = groundPoints[i].y - groundPoints[i - 1].y;
+
+        float a = deltaY / deltaX;
         float b = groundPoints[i].y - a * groundPoints[i].x;
-        float groundY = a * p.getPosition().x + b; 
+        float groundY = a * p.getPosition().x + b;
 
         if (p.getPosition().getY() + p.getWidth() >= groundY) {
             // Interpenetration
             p.setPosition(Vector(p.getPosition().getX(), groundY - p.getWidth(), p.getPosition().getZ()));
-            // Calculer la vélocité parallèle et perpendiculaire à la pente
+
+            // Si la pente est nulle (sol plat), on ne fait que l'interpénétration, pas de vélocité modifiée
+            if (a == 0) {
+                return; // Sol plat, on s'arrête ici
+            }
+
+            // Calculer la vélocité parallèle et perpendiculaire à la pente si la pente n'est pas nulle
             Vector velocity = p.getVelocity();
-            Vector tangent = Vector(1, a, 0).normalize(); 
+            Vector tangent = Vector(1, a, 0).normalize();
             Vector normal = Vector(-1 / a, 1, 0).normalize();
 
             // Composante de la vélocité dans la direction normale (perpendiculaire)
@@ -132,18 +140,13 @@ void CollisionSystem::detectAndResolveCollisions(std::vector<Particle*>& particl
 
 	Vector gravityForce = gravity->getGravity();
 
-    std::vector<Vector> groundPoints = {
-        Vector(0, ofGetHeight() * 0.75f, 0),
-        Vector(ofGetWidth() * 0.25f, ofGetHeight() * 0.65f, 0),
-        Vector(ofGetWidth() * 0.5f, ofGetHeight() * 0.75f, 0),
-        Vector(ofGetWidth() * 0.75f, ofGetHeight() * 0.65f, 0),
-        Vector(ofGetWidth(), ofGetHeight() * 0.75f, 0)
-    };
+    std::vector<Vector> groundPoints = ground.groundPoints;
 
     for (size_t i = 0; i < particles.size(); ++i) {
         for (size_t j = i + 1; j < particles.size(); ++j) {
             if (checkForCollision(*particles[i], *particles[j])) {
                 resolveCollision(*particles[i], *particles[j]);
+                enforceCableConstraint(*particles[i], *particles[j], 100);
             }
         }
 

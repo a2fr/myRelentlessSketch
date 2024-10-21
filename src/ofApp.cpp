@@ -4,6 +4,7 @@
 void ofApp::setup(){
     titleFont.load("goodtimesrg.otf", 55);
     m_creditFont.load("goodtimesrg.otf", 20);
+    nbParticleFont.load("goodtimesrg.otf", 15);
 
     currentState = MENU;
 
@@ -11,23 +12,17 @@ void ofApp::setup(){
     startButton = new Button("START", ofRectangle(ofGetWidth() / 2 - 100, ofGetHeight() / 2 + 50, 200, 50), false);
     returnButton = new Button("RETURN", ofRectangle(ofGetWidth() - 120, 10, 100, 25), false);
 
+    ground = Ground();
     world = World();
 
-	
     blob = MyBlob();
     blob.setUpMyBlob();
 
-    world.addBlob(&blob);
+    particleGreen = new Particle(Vector(ofGetWidth() - 100, 100, 0), 10, 0.0001f, ofColor::white);
+    particleWhite = new Particle(Vector(ofGetWidth() - 100, 200, 0), 10, 0.1f, ofColor::white);
 
-    // Initialize ground
-    std::vector<Vector> groundPoints = {
-        Vector(0, ofGetHeight() * 0.75f, 0),
-        Vector(ofGetWidth() * 0.25f, ofGetHeight() * 0.5f, 0),
-        Vector(ofGetWidth() * 0.5f, ofGetHeight() * 0.75f, 0),
-        Vector(ofGetWidth() * 0.75f, ofGetHeight() * 0.5f, 0),
-        Vector(ofGetWidth(), ofGetHeight() * 0.75f, 0)
-    };
-    /*ground = Ground(groundPoints);*/
+    world.addBlob(&blob);
+    
 }
 
 //--------------------------------------------------------------
@@ -82,25 +77,21 @@ void ofApp::drawMenu() {
 void ofApp::drawGame() {
     returnButton->Draw();
     world.draw();
+    
+    ofSetColor(ofColor::white);
+    nbParticleFont.drawString("Nombre de particule du blob:  " + ofToString(blob.getParticleCount()), 20, 30);
+
+    std::vector<Vector> groundPoints = ground.groundPoints;
     // Dessiner le sol à mi-hauteur de l'écran
     float groundY = static_cast<float>(3) * ofGetHeight() / 4;
 	// Of draw rectangle to create a ground
-	ofSetColor(110, 59, 29);
-	ofDrawRectangle(0, groundY, ofGetWidth(), ofGetHeight() - groundY);
-
-    std::vector<Vector> groundPoints = {
-        Vector(0, ofGetHeight() * 0.75f, 0),
-        Vector(ofGetWidth() * 0.25f, ofGetHeight() * 0.65f, 0),
-        Vector(ofGetWidth() * 0.5f, ofGetHeight() * 0.75f, 0),
-        Vector(ofGetWidth() * 0.75f, ofGetHeight() * 0.65f, 0),
-        Vector(ofGetWidth(), ofGetHeight() * 0.75f, 0)
-    };
-
+    ofSetColor(255);
+    
+    ofSetColor(110, 59, 29);
     for (int i = 0; i < groundPoints.size() - 1; i++) {
         ofDrawLine(groundPoints[i].x, groundPoints[i].y, groundPoints[i + 1].x, groundPoints[i + 1].y);
     }
 
-    /*ground.draw();*/
 }
 
 void ofApp::drawNames() {

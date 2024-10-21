@@ -7,11 +7,17 @@ MyBlob::MyBlob()
 
 void MyBlob::setUpMyBlob()
 {
-    for (int i = 0; i < 3; ++i) {
+    /*for (int i = 0; i < 3; ++i) {
         Particle* p = new Particle(Vector(ofRandom(200, 400), ofRandom(20, 200), 0), 20, 0.5f, ofColor::purple, true);
         p->setRefBlob(this);
         particles.push_back(p);
-    }
+    }*/
+    Particle* p = new Particle(Vector(ofRandom(200, 400), ofRandom(20, 200), 0), 20, 0.5f, ofColor::purple, true);
+    p->setRefBlob(this);
+    particles.push_back(p);
+    Particle* p2 = new Particle(Vector(ofRandom(200, 400), ofRandom(20, 200), 0), 20, 0.5f);
+    p2->setRefBlob(this);
+    particles.push_back(p2);
 }
 
 void MyBlob::draw()
@@ -46,11 +52,11 @@ void MyBlob::addParticle(Particle *p)
 void MyBlob::addParticle()
 {
     Particle* p;
-    if (rand() < (0.8 * RAND_MAX)) {
-        p = new Particle(particles[0]->getPosition(), 20, 0.25f, ofColor::purple, true);
+    if (rand() < (0.5 * RAND_MAX)) {
+        p = new Particle(Vector(particles[0]->getPosition().x, particles[0]->getPosition().y - 80, 0), 20, 0.25f, ofColor::purple, true);
     }
     else {
-        p = new Particle(particles[0]->getPosition(), 20, 0.5f);
+        p = new Particle(Vector(particles[0]->getPosition().x, particles[0]->getPosition().y - 80, 0), 20, 0.25f);
     }
     p->setRefBlob(this);
     particles.push_back(p);

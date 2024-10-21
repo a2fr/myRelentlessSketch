@@ -9,6 +9,7 @@
 #include "../CollisionSystem.h"
 #include "../World.h"
 #include "../MyBlob.h"
+#include "../Ground.h"
 
 
 
@@ -51,16 +52,15 @@ private:
     Button* returnButton;
     ofTrueTypeFont titleFont;
     ofTrueTypeFont m_creditFont;
+    ofTrueTypeFont nbParticleFont;
 
-    Particle* particleBlue;
-    Particle* particleRed;
     Particle* particleGreen;
     Particle* particleWhite;
-	//Player* player;
 
     Vector m_initialPos;
 
     World world;
     MyBlob blob;
-    /*Ground ground;*/
+
+    Ground ground;
 };

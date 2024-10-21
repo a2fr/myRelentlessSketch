@@ -4,6 +4,7 @@
 #include "Particle.h"
 #include "ParticleGravity.h"
 #include "MyBlob.h"
+#include "Ground.h"
 #include <vector>
 
 
@@ -18,6 +19,8 @@ private:
     void resolveCollision(Particle& p1, Particle& p2);
     bool checkForStationaryCollision(const Particle& p, const Vector& gravity);
     void CollisionSystem::checkForGroundCollision(Particle& p, std::vector<Vector> groundPoints, float dynamicFrictionCoeff, float normalForce);
+
+    Ground ground = Ground();
 };
 
 #endif // COLLISION_SYSTEM_H
