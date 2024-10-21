@@ -46,7 +46,7 @@ void MyBlob::addParticle(Particle *p)
 void MyBlob::addParticle()
 {
     Particle* p;
-    if (rand() < (0.5 * RAND_MAX)) {
+    if (rand() < (0.8 * RAND_MAX)) {
         p = new Particle(particles[0]->getPosition(), 20, 0.25f, ofColor::purple, true);
     }
     else {
@@ -58,11 +58,6 @@ void MyBlob::addParticle()
 
 MyBlob* MyBlob::split()
 {
-        // Vérifie s'il y a suffisamment de particules pour séparer
-        if (particles.size() <= 2) {
-            return nullptr; // Pas assez de particules pour faire une séparation
-        }
-
         int halfSize = particles.size() / 2;
         // Créer un nouveau blob
         MyBlob* newBlob = new MyBlob();
@@ -78,9 +73,45 @@ MyBlob* MyBlob::split()
             p->setRefBlob(newBlob);
         }
        
+        float separationDistance = 100.0f; // Distance pour séparer les blobs
+        for (Particle* p : newBlob->particles) {
+            Vector newPosition = p->getPosition() + Vector(separationDistance, 0, 0); // Déplace vers la droite
+            p->setPosition(newPosition); // Met à jour la position
+        }
+
+        // Optionnel : déplacer également les particules restantes de l'ancien blob
+        for (Particle* p : particles) {
+            Vector newPosition = p->getPosition() + Vector(-separationDistance, 0, 0); // Déplace vers la gauche
+            p->setPosition(newPosition); // Met à jour la position
+        }
+
+        // Appliquer une force de séparation ou une vitesse initiale aux particules
+        Vector separationForce(100, 0, 0); // Exemple de force de séparation vers la droite
+        for (Particle* p : newBlob->particles) {
+            p->setVelocity(p->getVelocity() + separationForce); // Appliquer la force de séparation
+        }
+
+        // Optionnel : appliquer une force de séparation à l'ancien blob également
+        Vector reverseSeparationForce(-100, 0, 0); // Force de séparation opposée
+        for (Particle* p : particles) {
+            p->setVelocity(p->getVelocity() + reverseSeparationForce); // Appliquer la force de séparation
+        }
+
         // Garder la première moitié dans le blob actuel
-        //particles.resize(halfSize); // Redimensionner pour garder uniquement la première moitié
         return newBlob; // Retourner le nouveau blob
+}
+
+void MyBlob::collapse(MyBlob& otherBlob)
+{
+    // Récupérer le nombre total de particules dans l'autre blob
+    int otherCount = otherBlob.getParticleCount();
+
+    // Ajouter toutes les particules de l'autre blob au blob actuel
+    for (int i = 0; i < otherCount; ++i) {
+        Particle* p = otherBlob.particles[i]; // Récupérer la particule de l'autre blob
+        particles.push_back(p); // Ajouter la particule au blob actuel
+        p->setRefBlob(this); // Mettre à jour la référence au blob actuel
+    }
 }
 
 

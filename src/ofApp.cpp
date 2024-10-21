@@ -117,8 +117,10 @@ void ofApp::keyPressed(int key){
        blob.addParticle();
    }
    if (key == 'x') {  // Vérifie si la touche espace est pressée
-       MyBlob *newBlob = blob.split();
-       world.addBlob(newBlob);
+       if (blob.getParticleCount() > 3) {
+           MyBlob* newBlob = blob.split();
+           world.addBlob(newBlob);
+       }
    }
 }
 

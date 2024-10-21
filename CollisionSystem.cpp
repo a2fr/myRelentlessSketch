@@ -9,22 +9,36 @@ bool CollisionSystem::checkForCollision(const Particle& p1, const Particle& p2) 
 }
 
 void CollisionSystem::resolveCollision(Particle& p1, Particle& p2) {
-    Vector normal = (p1.getPosition() - p2.getPosition()).normalize();
-    Vector relativeVelocity = p1.getVelocity() - p2.getVelocity();
-    double velocityAlongNormal = produitScalaire(relativeVelocity, normal);
+    // Vérifier si les particules appartiennent au même blob
+    if (p1.getRefBlob() == p2.getRefBlob()) {
+        // Les deux particules appartiennent au même blob, procéder à la résolution de collision
+        Vector normal = (p1.getPosition() - p2.getPosition()).normalize();
+        Vector relativeVelocity = p1.getVelocity() - p2.getVelocity();
+        double velocityAlongNormal = produitScalaire(relativeVelocity, normal);
 
-    // Only resolve if particles are moving towards each other
-    if (velocityAlongNormal > 0) return;
+        // Only resolve if particles are moving towards each other
+        if (velocityAlongNormal > 0) return;
 
-    double restitution = 1.0f; // Coefficient of restitution (you can adjust this value)
-    double impulseMagnitude = -(1 + restitution) * velocityAlongNormal;
-    impulseMagnitude /= p1.getInverseMasse() + p2.getInverseMasse();
+        double restitution = 1.0f; // Coefficient de restitution (vous pouvez ajuster cette valeur)
+        double impulseMagnitude = -(1 + restitution) * velocityAlongNormal;
+        impulseMagnitude /= p1.getInverseMasse() + p2.getInverseMasse();
 
-    Vector impulse = normal * impulseMagnitude;
+        Vector impulse = normal * impulseMagnitude;
 
-    // Apply impulses
-    p1.setVelocity(p1.getVelocity() + impulse * p1.getInverseMasse());
-    p2.setVelocity(p2.getVelocity() - impulse * p2.getInverseMasse());
+        // Appliquer les impulsions
+        p1.setVelocity(p1.getVelocity() + impulse * p1.getInverseMasse());
+        p2.setVelocity(p2.getVelocity() - impulse * p2.getInverseMasse());
+    }
+    else {
+        // Les particules appartiennent à des blobs différents
+        MyBlob* blob1 = p1.getRefBlob(); // Blob de la première particule
+        MyBlob* blob2 = p2.getRefBlob(); // Blob de la deuxième particule
+
+        if (blob1 && blob2) {
+            // Appeler la méthode collapse en passant l'autre blob
+            blob1->collapse(*blob2); // Fusionner blob1 avec blob2
+        }
+    }
 }
 
 bool CollisionSystem::checkForStationaryCollision(const Particle& p, const Vector& gravity) {

@@ -3,6 +3,7 @@
 
 #include "Particle.h"
 #include "ParticleGravity.h"
+#include "MyBlob.h"
 #include <vector>
 
 

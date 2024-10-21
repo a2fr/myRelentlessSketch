@@ -27,6 +27,7 @@ public:
     ~Particle() {}
 
     void setRefBlob(MyBlob* blob) { m_blob = blob; };
+    MyBlob* getRefBlob() { return m_blob; };
 
     void setVelocity(Vector v) { m_velocity = v; };
     Vector getVelocity() { return m_velocity; };

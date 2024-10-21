@@ -19,6 +19,8 @@ public:
     void addParticle();
 
     MyBlob* split();
+
+    void collapse(MyBlob& otherBlob);
    
     std::vector<Particle*> particles;  // Liste des particules constituant le blob
 private:
