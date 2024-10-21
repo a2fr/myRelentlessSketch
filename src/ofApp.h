@@ -7,7 +7,6 @@
 #include "../ParticleFriction.h"
 #include "../ParticleSpring.h"
 #include "../CollisionSystem.h"
-#include "../Player.h"
 #include "../World.h"
 #include "../MyBlob.h"
 
@@ -57,7 +56,7 @@ private:
     Particle* particleRed;
     Particle* particleGreen;
     Particle* particleWhite;
-	Player* player;
+	//Player* player;
 
     Vector m_initialPos;
 

@@ -31,14 +31,16 @@ private:
     ParticleGravity* gravity;
 
     //Spring force
-    float springConstant = 0.4;
-    float restLength = 75.0f; 
+    float springConstant = 0.6f;
+    float restLength = 100.0f; 
 
     // Initialize friction force generator
     ParticleFriction* friction;
-    float staticFrictionCoeff = 0.8f; 
+    float staticFrictionCoeff = 0.1f; 
     float dynamicFrictionCoeff = 0.001f;
-    float normalForce = 10.0f;
+    float normalForce = 9.81f;
+    float k1 = 0.4f;
+    float k2 = 0.2f;
 
     //Collision systeme
     CollisionSystem collisionSystem;

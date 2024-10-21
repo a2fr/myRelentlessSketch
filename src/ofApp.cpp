@@ -13,8 +13,9 @@ void ofApp::setup(){
 
     world = World();
 
-	player = new Player(Vector(100, 100, 0), 20, 0.1f , ofColor::purple);
-    blob = MyBlob(player);
+	
+    blob = MyBlob();
+    blob.setUpMyBlob();
 
     world.addBlob(&blob);
 
@@ -51,8 +52,6 @@ void ofApp::updateGame() {
     float deltaTime = ofGetLastFrameTime()*8;
 
     world.update(deltaTime);
-    // Update the player's position based on input
-    player->handleInput();
 }
 
 //--------------------------------------------------------------
@@ -116,6 +115,10 @@ void ofApp::drawNames() {
 void ofApp::keyPressed(int key){
    if (key == 'a') {  // Vérifie si la touche espace est pressée
        blob.addParticle();
+   }
+   if (key == 'x') {  // Vérifie si la touche espace est pressée
+       MyBlob *newBlob = blob.split();
+       world.addBlob(newBlob);
    }
 }
 

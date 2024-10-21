@@ -29,10 +29,10 @@ void CollisionSystem::resolveCollision(Particle& p1, Particle& p2) {
 
 bool CollisionSystem::checkForStationaryCollision(const Particle& p, const Vector& gravity) {
     Vector expectedAcceleration = gravity * p.getInverseMasse();
-    return (p.getAcceleration() - expectedAcceleration).getNorme() < 0.01; // Small threshold for comparison
+    return (p.getAcceleration() - expectedAcceleration).getNorme() < 0.1; // Small threshold for comparison
 }
 
-// Example of enforcing cable and steel rod constraints
+
 void CollisionSystem::enforceCableConstraint(Particle& p1, Particle& p2, float maxLength) {
     Vector distanceVector = p1.getPosition() - p2.getPosition();
     double distance = distanceVector.getNorme();
@@ -62,53 +62,57 @@ void CollisionSystem::checkForGroundCollision(Particle& p, std::vector<Vector> g
             break;
         }
     }
-    
+   
+
     if (i == 0) { // Collision avec le mur de gauche
         // Collision with the left wall
         p.setPosition(Vector(p.getPosition().getX() + p.getWidth(), p.getPosition().y, p.getPosition().z));
 
-        // Nullify the vertical velocity
         p.setVelocity(Vector(-p.getVelocity().getX(), p.getVelocity().getY(), p.getVelocity().getZ()));
 
-        // Apply Vertical friction
-        float frictionForce = -p.getVelocity().getY() * dynamicFrictionCoeff * normalForce;
-        p.addForce(Vector(frictionForce, 0, 0));
         return;
     }
-    else if (p.getPosition().x >= ofGetWidth()) { // Collision avec le mur de droite
+    else if (i >= groundPoints.size()) { // Collision avec le mur de droite
         // Collision with the right wall
         p.setPosition(Vector(p.getPosition().getX() - p.getWidth(), p.getPosition().y, p.getPosition().z));
 
         // Nullify the vertical velocity
         p.setVelocity(Vector(-p.getVelocity().getX(), p.getVelocity().getY(), p.getVelocity().getZ()));
-
-        // Apply Vertical friction
-        float frictionForce = -p.getVelocity().getY() * dynamicFrictionCoeff * normalForce;
-        p.addForce(Vector(frictionForce, 0, 0));
         return;
     }
     else { // Peut être collision avec le sol
         // Trouver la hauteur du terrain sur la portion i-1, i.
         float a = (groundPoints[i].y - groundPoints[i - 1].y) / (groundPoints[i].x - groundPoints[i - 1].x);
         float b = groundPoints[i].y - a * groundPoints[i].x;
-        float groundY = a * p.getPosition().x + b;
+        float groundY = a * p.getPosition().x + b; 
 
         if (p.getPosition().getY() + p.getWidth() >= groundY) {
-            // Collision with the ground
+            // Interpenetration
             p.setPosition(Vector(p.getPosition().getX(), groundY - p.getWidth(), p.getPosition().getZ()));
+            // Calculer la vélocité parallèle et perpendiculaire à la pente
+            Vector velocity = p.getVelocity();
+            Vector tangent = Vector(1, a, 0).normalize(); 
+            Vector normal = Vector(-1 / a, 1, 0).normalize();
 
-            // Nullify the vertical velocity
-            p.setVelocity(Vector(p.getVelocity().getX(), 0, p.getVelocity().getZ()));
+            // Composante de la vélocité dans la direction normale (perpendiculaire)
+            float velocityNormal = produitScalaire(velocity, normal);
 
-            // Apply horizontal friction
-            float frictionForce = -p.getVelocity().getX() * dynamicFrictionCoeff * normalForce;
-            p.addForce(Vector(frictionForce, 0, 0));
+            // Composante de la vélocité dans la direction tangentielle (glissement)
+            float velocityTangent = produitScalaire(velocity, tangent);
+
+            // Réduire la vélocité normale (réaction de l'impact) et tangente (friction dynamique)
+            float restitution = 0.1; // Facteur de restitution pour amortir le rebond
+            float dynamicFriction = 0.01; // Coefficient de friction dynamique
+
+            // Appliquer les changements de vélocité
+            Vector newVelocity = tangent * (velocityTangent * (1 - dynamicFriction)) - normal * (velocityNormal * restitution);
+            p.setVelocity(newVelocity);
         }
     }
 }
 
 
-void CollisionSystem::detectAndResolveCollisions(std::vector<Particle*>& particles, float deltaTime, ParticleGravity* gravity, float dynamicFrictionCoeff, float normalForce) {
+void CollisionSystem::detectAndResolveCollisions(std::vector<Particle*>& particles, float deltaTime, ParticleGravity* gravity, float dynamicFrictionCoeff, float normalForce, float k1, float k2, float staticFrictionCoefficient) {
 
     float groundY = static_cast<float>(3) * ofGetHeight() / 4; // Ground is at y = groundY
 
@@ -129,8 +133,10 @@ void CollisionSystem::detectAndResolveCollisions(std::vector<Particle*>& particl
             }
         }
 
-
-        // Check for ground collision
-        checkForGroundCollision(*particles[i], groundPoints, dynamicFrictionCoeff, normalForce);
-    }
+        //if (!checkForStationaryCollision(*particles[i], gravityForce)) {
+            // Check for ground collision
+            checkForGroundCollision(*particles[i], groundPoints, dynamicFrictionCoeff, normalForce);
+        //}
+     }
 }
+

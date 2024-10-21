@@ -1,7 +1,7 @@
 #include "ParticleFriction.h"
 
-ParticleFriction::ParticleFriction(float staticCoeff, float dynamicCoeff, float normalForce)
-    : staticFrictionCoefficient(staticCoeff), dynamicFrictionCoefficient(dynamicCoeff), normalForce(normalForce) {}
+ParticleFriction::ParticleFriction(float staticCoeff, float k1, float k2, float normalForce)
+    : staticFrictionCoefficient(staticCoeff), k1(k1), k2(k2) , normalForce(normalForce) {}
 
 void ParticleFriction::updateForce(Particle* particle, float duration)
 {
@@ -19,7 +19,7 @@ void ParticleFriction::updateForce(Particle* particle, float duration)
     }
     else {
         // If the particle is moving, apply dynamic friction
-        Vector dynamicFrictionForce = -velocity.normalize() * dynamicFrictionCoefficient * normalForce;
+        Vector dynamicFrictionForce = -velocity.normalize() * (k1*velocity.getNorme() +  k2*velocity.getNorme());
         particle->addForce(dynamicFrictionForce);
     }
 }

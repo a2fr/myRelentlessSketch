@@ -30,6 +30,21 @@ float Particle::getWidth() const
     return m_width;
 }
 
+void Particle::handleInput()
+{
+    if (IsPlayer) {
+        if (ofGetKeyPressed(OF_KEY_LEFT)) {
+            setVelocity(getVelocity() + Vector(-2, 0, 0));
+        }
+        if (ofGetKeyPressed(OF_KEY_RIGHT)) {
+            setVelocity(getVelocity() + Vector(2, 0, 0));
+        }
+        if (ofGetKeyPressed(OF_KEY_UP)) {
+            setVelocity(getVelocity() + Vector(0, -5, 0));
+        }
+    }
+}
+
 // Get the acceleration of the particle
 Vector Particle::getAcceleration() const
 {

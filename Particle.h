@@ -4,6 +4,8 @@
 #include "Vector.h"
 #include "ofMain.h"
 
+class MyBlob;
+
 class Particle
 {
 private:
@@ -14,14 +16,22 @@ private:
     float m_inverseMasse;
     ofColor m_color;
     Vector m_accumForce;
+    bool IsPlayer;
+
+    MyBlob* m_blob;
+    
 
 public:
-    Particle(Vector pos = Vector(0, 0, 0), float w = 10, float Im = 1.0f, ofColor color = ofColor::blue, Vector velocity = Vector(), Vector a = Vector()) :
-        m_width(w), m_position(pos), m_velocity(velocity), m_acceleration(a), m_inverseMasse(Im), m_color(color) {};
+    Particle(Vector pos = Vector(0, 0, 0), float w = 10, float Im = 1.0f, ofColor color = ofColor::blue, bool isPlayer = false, Vector velocity = Vector(), Vector a = Vector()) :
+        m_width(w), m_position(pos), m_velocity(velocity), m_acceleration(a), m_inverseMasse(Im), m_color(color), IsPlayer(isPlayer) {};
     ~Particle() {}
+
+    void setRefBlob(MyBlob* blob) { m_blob = blob; };
 
     void setVelocity(Vector v) { m_velocity = v; };
     Vector getVelocity() { return m_velocity; };
+
+    void setIsPlayer(bool isplayer) { IsPlayer = isplayer;  };
 
     const Vector& getPosition() const { return m_position; };
     void setPosition(Vector v) { m_position = v; };
@@ -42,6 +52,8 @@ public:
     Vector getForce() { return m_accumForce; };
 
     float getWidth() const;
+
+    void handleInput();
 };
 
 #endif // Particule_h
