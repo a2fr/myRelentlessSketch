@@ -11,7 +11,7 @@ void ParticleSpring::updateForce(Particle* particle, float duration) {
     float length = forceDirection.getNorme();
 
     // Calculate the magnitude of the force
-    float forceMagnitude = springConstant * (length - restLength);
+    float forceMagnitude = springConstant * (length - restLength);    
 
     // Apply the force to the particle
     if (length > 0.0f) {
@@ -19,4 +19,5 @@ void ParticleSpring::updateForce(Particle* particle, float duration) {
         Vector force = forceDirection * forceMagnitude;
         particle->addForce(force);
     }
+
 }

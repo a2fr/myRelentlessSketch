@@ -67,7 +67,7 @@ void CollisionSystem::enforceSteelRodConstraint(Particle& p1, Particle& p2, floa
     }
 }
 
-void CollisionSystem::checkForGroundCollision(Particle& p, std::vector<Vector> groundPoints, float dynamicFrictionCoeff, float normalForce) {
+void CollisionSystem::checkForGroundCollision(Particle& p, std::vector<Vector> groundPoints, float dynamicFrictionCoeff, float normalForce, ParticleForceRegistry forceRegistry, float k1, float k2, float staticFrictionCoefficient) {
     // Trouver entre quels points se trouve la particule. Décider si elle est au dessus ou en dessous la droite formée par les deux points.
     int i = 0;
     while (groundPoints[i].x < p.getPosition().x) {
@@ -108,6 +108,7 @@ void CollisionSystem::checkForGroundCollision(Particle& p, std::vector<Vector> g
 
             // Si la pente est nulle (sol plat), on ne fait que l'interpénétration, pas de vélocité modifiée
             if (a == 0) {
+                //p.setVelocity(Vector(p.getVelocity().x, -p.getVelocity().y, p.getVelocity().z));
                 return; // Sol plat, on s'arrête ici
             }
 
@@ -116,25 +117,26 @@ void CollisionSystem::checkForGroundCollision(Particle& p, std::vector<Vector> g
             Vector tangent = Vector(1, a, 0).normalize();
             Vector normal = Vector(-1 / a, 1, 0).normalize();
 
-            // Composante de la vélocité dans la direction normale (perpendiculaire)
+            ParticleFriction* friction = new ParticleFriction(staticFrictionCoefficient, k1, k2, normal.getNorme());
+            forceRegistry.add(&p, friction);
+            // Composante de la vélocité dans la direction normale (perpendiculaire à la pente)
             float velocityNormal = produitScalaire(velocity, normal);
 
-            // Composante de la vélocité dans la direction tangentielle (glissement)
+            // Composante de la vélocité dans la direction tangentielle (glissement le long de la pente)
             float velocityTangent = produitScalaire(velocity, tangent);
 
-            // Réduire la vélocité normale (réaction de l'impact) et tangente (friction dynamique)
-            float restitution = 0.1; // Facteur de restitution pour amortir le rebond
-            float dynamicFriction = 0.01; // Coefficient de friction dynamique
+            // Réduire uniquement la vélocité normale pour simuler un rebond amorti sur la pente
+            float restitution = 0.1;  // Facteur de restitution pour amortir le rebond
 
-            // Appliquer les changements de vélocité
-            Vector newVelocity = tangent * (velocityTangent * (1 - dynamicFriction)) - normal * (velocityNormal * restitution);
+            Vector newVelocity = tangent * velocityTangent - normal * (velocityNormal * restitution);
+
             p.setVelocity(newVelocity);
         }
     }
 }
 
 
-void CollisionSystem::detectAndResolveCollisions(std::vector<Particle*>& particles, float deltaTime, ParticleGravity* gravity, float dynamicFrictionCoeff, float normalForce, float k1, float k2, float staticFrictionCoefficient) {
+void CollisionSystem::detectAndResolveCollisions(std::vector<Particle*>& particles, float deltaTime, ParticleGravity* gravity, float dynamicFrictionCoeff, float normalForce, float k1, float k2, float staticFrictionCoefficient, ParticleForceRegistry forceRegistry) {
 
     float groundY = static_cast<float>(3) * ofGetHeight() / 4; // Ground is at y = groundY
 
@@ -146,13 +148,13 @@ void CollisionSystem::detectAndResolveCollisions(std::vector<Particle*>& particl
         for (size_t j = i + 1; j < particles.size(); ++j) {
             if (checkForCollision(*particles[i], *particles[j])) {
                 resolveCollision(*particles[i], *particles[j]);
-                enforceCableConstraint(*particles[i], *particles[j], 100);
+                //enforceCableConstraint(*particles[i], *particles[j], 100);
             }
         }
 
         //if (!checkForStationaryCollision(*particles[i], gravityForce)) {
             // Check for ground collision
-            checkForGroundCollision(*particles[i], groundPoints, dynamicFrictionCoeff, normalForce);
+            checkForGroundCollision(*particles[i], groundPoints, dynamicFrictionCoeff, normalForce, forceRegistry,  k1,  k2,  staticFrictionCoefficient);
         //}
      }
 }

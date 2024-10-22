@@ -68,7 +68,8 @@ void World::update(float deltaTime) {
     }
 
     // Check for collisions and resolve them on all particles
-    collisionSystem.detectAndResolveCollisions(allParticles, deltaTime, gravity, dynamicFrictionCoeff, normalForce, k1, k2, staticFrictionCoeff);
+    collisionSystem.detectAndResolveCollisions(allParticles, deltaTime, gravity, dynamicFrictionCoeff, normalForce, k1, k2, staticFrictionCoeff, forceRegistry);
+
 
     for (MyBlob* b : blobs){
         // Update each particle's position based on forces applied
@@ -78,6 +79,8 @@ void World::update(float deltaTime) {
             p->handleInput();
         }
     }
+
+
 }
 
 void World::draw()
