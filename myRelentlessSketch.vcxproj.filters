@@ -19,6 +19,7 @@
     <ClCompile Include="World.cpp" />
     <ClCompile Include="MyBlob.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -42,6 +43,7 @@
     <ClInclude Include="World.h" />
     <ClInclude Include="MyBlob.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="Quaternion.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

@@ -152,10 +152,9 @@ void CollisionSystem::detectAndResolveCollisions(std::vector<Particle*>& particl
             }
         }
 
-        //if (!checkForStationaryCollision(*particles[i], gravityForce)) {
+        
             // Check for ground collision
             checkForGroundCollision(*particles[i], groundPoints, dynamicFrictionCoeff, normalForce, forceRegistry,  k1,  k2,  staticFrictionCoefficient);
-        //}
      }
 }
 

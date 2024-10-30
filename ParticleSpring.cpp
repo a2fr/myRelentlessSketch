@@ -19,5 +19,12 @@ void ParticleSpring::updateForce(Particle* particle, float duration) {
         Vector force = forceDirection * forceMagnitude;
         particle->addForce(force);
     }
+    //si trop éloigné: agit comme un cable
+    float maxLength = 200.0f;
+    if (length > maxLength) {
+        Vector correction = forceDirection.normalize() * (length - maxLength);
+        other->setPosition(other->getPosition() - correction * 0.5f);
+        particle->setPosition(particle->getPosition() + correction * 0.5f);
+    }
 
 }

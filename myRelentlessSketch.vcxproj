@@ -114,6 +114,7 @@
     <ClCompile Include="ParticleGravity.cpp" />
     <ClCompile Include="ParticleSpring.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="Vector.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="ParticleGravity.h" />
     <ClInclude Include="ParticleSpring.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Quaternion.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="World.h" />
