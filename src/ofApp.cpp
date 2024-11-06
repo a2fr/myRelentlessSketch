@@ -2,6 +2,13 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    TestQuaternion testQ = TestQuaternion();
+    testQ.runTests();
+    TestMatrix3 testM3 = TestMatrix3();
+    testM3.runTestMatrix3();
+    TestMatrix4 testM4 = TestMatrix4();
+    testM4.runTestMatrix4();
+
     titleFont.load("goodtimesrg.otf", 55);
     m_creditFont.load("goodtimesrg.otf", 20);
     nbParticleFont.load("goodtimesrg.otf", 15);

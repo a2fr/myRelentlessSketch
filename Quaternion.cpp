@@ -28,8 +28,10 @@ Quaternion Quaternion::conjugate() const
 
 Quaternion Quaternion::inverse() const
 {
-    float normSq = pow(norme(),2);
-    return Quaternion(w / normSq, -x / normSq, -y / normSq, -z / normSq);
+    float norm = norme();
+    Quaternion conjug = conjugate();
+
+    return Quaternion(conjug.w / norm, conjug.x / norm, conjug.y / norm, conjug.z / norm);
 }
 
 Quaternion Quaternion::operator*(const Quaternion& q) const
@@ -39,8 +41,11 @@ Quaternion Quaternion::operator*(const Quaternion& q) const
     float w2 = q.w;
     Vector v2 = Vector(q.x, q.y, q.z);
 
-    float scalarPart = w1 * w2;
-    Vector vectorPart = -((v2*w1 +  v1*w2 + produitVectoriel(v1, v2)) * produitScalaire(v1, v2));
+    // Calcul de la partie scalaire
+    float scalarPart = w1 * w2 - produitScalaire(v1, v2);  // produit scalaire entre les vecteurs
+
+    // Calcul de la partie vectorielle
+    Vector vectorPart = (v2 * w1) + (v1 * w2) + produitVectoriel(v1, v2);  // produit vectoriel
 
     return Quaternion(scalarPart, vectorPart.x, vectorPart.y, vectorPart.z);
 }
@@ -71,11 +76,6 @@ Quaternion Quaternion::slerp(const Quaternion& q0, const Quaternion& q1, float t
 {
     Quaternion slerped = (q1 * q0.inverse()).exponentiate(t);
     return slerped * q0;
-}
-
-Matrix4 Quaternion::toMatrix4() const
-{
-    return Matrix4();
 }
 
 

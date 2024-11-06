@@ -20,6 +20,11 @@
     <ClCompile Include="MyBlob.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="TestQuaternion.cpp" />
+    <ClCompile Include="Matrix3.cpp" />
+    <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="TestMatrix3.cpp" />
+    <ClCompile Include="TestMatrix4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -44,6 +49,11 @@
     <ClInclude Include="MyBlob.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="TestQuaternion.h" />
+    <ClInclude Include="Matrix3.h" />
+    <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="TestMatrix3.h" />
+    <ClInclude Include="TestMatrix4.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

@@ -10,6 +10,10 @@
 #include "../World.h"
 #include "../MyBlob.h"
 #include "../Ground.h"
+#include "../TestQuaternion.h"
+#include "../TestMatrix3.h"
+#include "../TestMatrix4.h"
+
 
 
 
