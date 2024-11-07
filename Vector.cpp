@@ -1,149 +1,98 @@
+// Vector.cpp
 #include "Vector.h"
+#include <cmath> // For sqrt
 
-// Constructeurs
+// Constructors
 Vector::Vector() : x(0), y(0), z(0) {}
 
-Vector::Vector(double x, double y, double z) : x(x), y(y), z(z) {}
+Vector::Vector(float x, float y, float z) : x(x), y(y), z(z) {}
 
-// Methodes
-double Vector::getNorme() const
-{
-    return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+// Operators
+Vector Vector::operator+(const Vector& v) const {
+    return Vector(x + v.x, y + v.y, z + v.z);
 }
 
-double Vector::getNormeAuCarre() const
-{
-    return pow(x, 2) + pow(y, 2) + pow(z, 2);
+Vector Vector::operator-(const Vector& v) const {
+    return Vector(x - v.x, y - v.y, z - v.z);
 }
 
-Vector Vector::normalize() const {
-    float norme = getNorme();
-    if (norme == 0) {
-        return Vector(0, 0, 0); // Retourne un vecteur nul si la norme est zéro
-    }
-    return Vector(x / norme, y / norme, z / norme);
+Vector Vector::operator*(float scalar) const {
+    return Vector(x * scalar, y * scalar, z * scalar);
 }
 
-void Vector::print(std::ostream& flux) const
-{
-    flux << "(" << x << ", " << y << ", " << z << ")";
+Vector Vector::operator/(float scalar) const {
+    return Vector(x / scalar, y / scalar, z / scalar);
 }
 
-void Vector::afficher() const
-{
-    std::cout << "(" << x << ", " << y << ", " << z << ")" << std::endl;
-}
-
-glm::vec3 Vector::getGlmVec() const
-{
-    return glm::vec3(x, y, z);
-}
-
-// Operateurs
-Vector& Vector::operator+=(const Vector& v)
-{
+Vector& Vector::operator+=(const Vector& v) {
     x += v.x;
     y += v.y;
     z += v.z;
     return *this;
 }
 
-Vector& Vector::operator-=(const Vector& v)
-{
+Vector& Vector::operator-=(const Vector& v) {
     x -= v.x;
     y -= v.y;
     z -= v.z;
     return *this;
 }
 
-Vector& Vector::operator*=(double num)
-{
-    x *= num;
-    y *= num;
-    z *= num;
+Vector& Vector::operator*=(float scalar) {
+    x *= scalar;
+    y *= scalar;
+    z *= scalar;
     return *this;
 }
 
-Vector& Vector::operator/=(double num)
-{
-    if (num != 0) {
-        x /= num;
-        y /= num;
-        z /= num;
-    }
+Vector& Vector::operator/=(float scalar) {
+    x /= scalar;
+    y /= scalar;
+    z /= scalar;
     return *this;
 }
 
-// Operateurs externes
-Vector operator+(const Vector& v1, const Vector& v2)
-{
-    Vector resultat(v1);
-    resultat += v2;
-    return resultat;
+bool Vector::operator==(const Vector& v) const {
+    return x == v.x && y == v.y && z == v.z;
 }
 
-Vector operator-(const Vector& v1, const Vector& v2)
-{
-    Vector resultat(v1);
-    resultat -= v2;
-    return resultat;
+bool Vector::operator!=(const Vector& v) const {
+    return !(*this == v);
 }
 
-Vector& Vector::operator*=(Vector const& v) {
-    x *= v.x;
-    y *= v.y;
-    z *= v.z;
-    return *this;
+// Methods
+float Vector::length() const {
+    return sqrt(x * x + y * y + z * z);
 }
 
-Vector operator*(Vector const& v1, Vector const& v2) {
-    Vector vec(v1);
-    vec *= v2;
-    return vec;
+Vector Vector::normalize() const {
+    float len = length();
+    return Vector(x / len, y / len, z / len);
 }
 
-Vector operator*(const Vector& vec, double num)
-{
-    Vector copie(vec);
-    copie *= num;
-    return copie;
-}
-
-Vector operator/(const Vector& vec, double num)
-{
-    Vector copie(vec);
-    copie /= num;
-    return copie;
-}
-
-// Unary negation operator
-Vector operator-(const Vector& vec)
-{
-    return Vector(-vec.x, -vec.y, -vec.z);
-}
-
-bool operator==(const Vector& v1, const Vector& v2)
-{
-    return (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z);
-}
-
-std::ostream& operator<<(std::ostream& flux, const Vector& v)
-{
-    v.print(flux);
-    return flux;
-}
-
-// Fonctions amies
-double produitScalaire(const Vector& v1, const Vector& v2)
-{
-    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-}
-
-Vector produitVectoriel(const Vector& v1, const Vector& v2)
-{
+Vector Vector::cross(const Vector& v) const {
     return Vector(
-        v1.y * v2.z - v1.z * v2.y,
-        v1.z * v2.x - v1.x * v2.z,
-        v1.x * v2.y - v1.y * v2.x
+        y * v.z - z * v.y,
+        z * v.x - x * v.z,
+        x * v.y - y * v.x
     );
+}
+
+float Vector::dot(const Vector& a, const Vector& b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+// Conversion to ofVec3f
+ofVec3f Vector::toOfVec3f() const {
+    return ofVec3f(x, y, z);
+}
+
+// Conversion to glm::vec3
+glm::vec3 Vector::toGlmVec3() const {
+    return glm::vec3(x, y, z);
+}
+
+// Conversion from glm::vec3
+Vector Vector::fromGlmVec3(const glm::vec3& v) {
+    return Vector(v.x, v.y, v.z);
 }

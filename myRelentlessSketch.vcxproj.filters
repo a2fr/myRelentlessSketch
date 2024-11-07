@@ -7,15 +7,16 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="ParticleGravity.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Vector.cpp" />
-    <ClCompile Include="ParticleForceRegistry.cpp" />
-    <ClCompile Include="ParticleFriction.cpp" />
-    <ClCompile Include="ParticleSpring.cpp" />
-    <ClCompile Include="CollisionSystem.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="CorpsRigide.cpp" />
+    <ClCompile Include="Matrix3.cpp" />
+    <ClCompile Include="Matrix3_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="PhysicsIntegrator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -26,16 +27,13 @@
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleForceGenerator.h" />
-    <ClInclude Include="Particle.h" />
-    <ClInclude Include="ParticleGravity.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Vector.h" />
-    <ClInclude Include="ParticleForceRegistry.h" />
-    <ClInclude Include="ParticleFriction.h" />
-    <ClInclude Include="ParticleSpring.h" />
-    <ClInclude Include="CollisionSystem.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="CorpsRigide.h" />
+    <ClInclude Include="Matrix3.h" />
+    <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="PhysicsIntegrator.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

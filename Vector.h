@@ -1,57 +1,44 @@
-#ifndef Vector_h
-#define Vector_h
+// Vector.h
+#ifndef VECTOR_H
+#define VECTOR_H
 
-#include <iostream>
-#include "glm/vec3.hpp"
-#include <math.h>
+#include "ofVec3f.h" // Include the OpenFrameworks vector header
+#include <glm/glm.hpp> // Include the GLM vector header
 
-class Vector
-{
+class Vector {
 public:
-    double x;
-    double y;
-    double z;
+    float x, y, z;
 
-public:
-    // Constructeurs
+    // Constructors
     Vector();
-    Vector(double x, double y, double z);
+    Vector(float x, float y, float z);
 
-    float getX() const { return x; };
-    float getY() const { return y; };
-    float getZ() const { return z; };
-    void setY(float y) { this->y = y; };
-
-    // Methodes
-    double getNorme() const;
-    double getNormeAuCarre() const;
-    Vector normalize() const;
-
-    void print(std::ostream& flux) const;
-    void afficher() const;
-    glm::vec3 getGlmVec() const;
-
-    // Operateurs
+    // Operators
+    Vector operator+(const Vector& v) const;
+    Vector operator-(const Vector& v) const;
+    Vector operator*(float scalar) const;
+    Vector operator/(float scalar) const;
     Vector& operator+=(const Vector& v);
     Vector& operator-=(const Vector& v);
-    Vector& operator*=(Vector const& v);
+    Vector& operator*=(float scalar);
+    Vector& operator/=(float scalar);
+    bool operator==(const Vector& v) const;
+    bool operator!=(const Vector& v) const;
 
-    Vector& operator*=(double num);
-    Vector& operator/=(double num);
+    // Methods
+    float length() const;
+    Vector normalize() const;
+    Vector cross(const Vector& v) const;
+    static float dot(const Vector& a, const Vector& b);
 
-    // Fonctions amies
-    friend double produitScalaire(const Vector& v1, const Vector& v2);
-    friend Vector produitVectoriel(const Vector& v1, const Vector& v2);
+    // Conversion to ofVec3f
+    ofVec3f toOfVec3f() const;
+
+    // Conversion to glm::vec3
+    glm::vec3 toGlmVec3() const;
+
+    // Conversion from glm::vec3
+    static Vector fromGlmVec3(const glm::vec3& v);
 };
 
-// Operateurs externes
-Vector operator+(const Vector& v1, const Vector& v2);
-Vector operator-(const Vector& v1, const Vector& v2);
-Vector operator*(Vector const& v1, Vector const& v2);
-Vector operator*(const Vector& vec, double num);
-Vector operator/(const Vector& vec, double num);
-Vector operator-(const Vector& vec);
-bool operator==(const Vector& v1, const Vector& v2);
-std::ostream& operator<<(std::ostream& flux, const Vector& v);
-
-#endif // Vector_h
+#endif // VECTOR_H

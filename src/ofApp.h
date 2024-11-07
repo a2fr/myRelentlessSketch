@@ -1,13 +1,9 @@
 #pragma once
 
 #include "ofMain.h"
-#include "../Button.h"
-#include "../ParticleForceRegistry.h"
-#include "../ParticleGravity.h"
-#include "../ParticleFriction.h"
-#include "../ParticleSpring.h"
-#include "../CollisionSystem.h"
-#include "../Player.h"
+#include "..\CorpsRigide.h"         // Your rigid body class
+#include "..\PhysicsIntegrator.h"   // The physics integrator for handling forces
+#include "..\Button.h"
 
 enum GameState {
     MENU,
@@ -15,26 +11,16 @@ enum GameState {
 };
 
 class ofApp : public ofBaseApp {
-
 public:
-    void setup();
-    void update();
-    void draw();
+    // Standard openFrameworks methods
+    void setup() override;
+    void update() override;
+    void draw() override;
 
-    void keyPressed(int key);
-    void keyReleased(int key);
-    void mouseMoved(int x, int y);
-    void mouseDragged(int x, int y, int button);
-
-	void resetGame();
-
-    void mousePressed(int x, int y, int button);
-    void mouseReleased(int x, int y, int button);
-    void mouseEntered(int x, int y);
-    void mouseExited(int x, int y);
-    void windowResized(int w, int h);
-    void dragEvent(ofDragInfo dragInfo);
-    void gotMessage(ofMessage msg);
+    // Event handlers for interaction
+	void mouseMoved(int x, int y) override;
+    void mousePressed(int x, int y, int button) override;
+    void keyPressed(int key) override;
 
     void drawMenu();
     void drawGame();
@@ -48,22 +34,21 @@ private:
     Button* returnButton;
     ofTrueTypeFont titleFont;
     ofTrueTypeFont m_creditFont;
+    ofTrueTypeFont launchForceFont;
 
-    Particle* particleBlue;
-    Particle* particleRed;
-    Particle* particleGreen;
-    Particle* particleWhite;
-	Player* player;
+    // Camera for 3D perspective
+    ofEasyCam camera;
 
-    Vector m_initialPos;
+    // Physics components
+    CorpsRigide box;                  // Rigid body for the box
+    PhysicsIntegrator physicsIntegrator; // Manages forces and updates on the rigid body
 
-    std::vector<Particle*> particles;    // List of particles
-    ParticleForceRegistry forceRegistry; // Force registry to apply forces to particles
-    ParticleGravity* gravity;
-    ParticleSpring* springRed;
-	//ParticleSpring* springBlue;
-    ParticleFriction* friction;
+    // Helper methods
+    void resetBox();                  // Reset the box's position and rotation
+	void resetCamera();               // Reset the camera position and orientation
 
-    CollisionSystem collisionSystem;
-    /*Ground ground;*/
+    // Game parameters
+    float launchForce;                // Magnitude of the launch force
+    Vector gravity;                   // Gravity vector
+    float torqueFactor;               // Scaling factor for applied torque
 };

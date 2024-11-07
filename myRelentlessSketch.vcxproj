@@ -105,27 +105,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
-    <ClCompile Include="CollisionSystem.cpp" />
-    <ClCompile Include="ParticleFriction.cpp" />
-    <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="ParticleForceRegistry.cpp" />
-    <ClCompile Include="ParticleGravity.cpp" />
-    <ClCompile Include="ParticleSpring.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="CorpsRigide.cpp" />
+    <ClCompile Include="Matrix3.cpp" />
+    <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="PhysicsIntegrator.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="Matrix3_test.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
-    <ClInclude Include="CollisionSystem.h" />
-    <ClInclude Include="ParticleFriction.h" />
-    <ClInclude Include="ParticleForceGenerator.h" />
-    <ClInclude Include="Particle.h" />
-    <ClInclude Include="ParticleForceRegistry.h" />
-    <ClInclude Include="ParticleGravity.h" />
-    <ClInclude Include="ParticleSpring.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="CorpsRigide.h" />
+    <ClInclude Include="Matrix3.h" />
+    <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="PhysicsIntegrator.h" />
+    <ClInclude Include="Quaternion.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
