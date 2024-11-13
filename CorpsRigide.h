@@ -44,8 +44,8 @@ public:
 
     void clearAccumulators();
 
-    //void applyForceAtPoint(const Vector& force, const Vector& point);
-    //void applyTorque(const Vector& torque);
+    void applyForceAtPoint(const Vector& force, const Vector& point);
+    void applyTorque(const Vector& torque);
 };
 
 #endif // CORPSRIGIDE_H

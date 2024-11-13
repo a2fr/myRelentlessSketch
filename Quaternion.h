@@ -21,31 +21,29 @@ public:
 
     //Négation
     Quaternion negate()const;
-
     //Identité (retourne le quaternion Identité)
     Quaternion identity() const;
-    
     //Norme 
     float norme() const;
     Quaternion normalize() const;
-
     //Conjugué
     Quaternion conjugate() const;
     //Inverse
     Quaternion inverse() const;
-
     // Multiplication de quaternions
     Quaternion operator*(const Quaternion& q) const;
+    Quaternion& operator*=(const Quaternion& q);
+    Quaternion& operator+=(const Quaternion& q);
+    Quaternion operator+(const Quaternion& q) const;
+    Quaternion operator*(float scalar) const;
+    Quaternion& operator*=(float scalar);
 
     //diférence
     Quaternion difference(const Quaternion& q) const;
-
     //Produit sclaire
     float dotProduct(const Quaternion& q) const;
-
     //Exponentiation
     Quaternion exponentiate(float t) const;
-
     //Slerp
     Quaternion slerp(const Quaternion& q0, const Quaternion& q1, float t);
 

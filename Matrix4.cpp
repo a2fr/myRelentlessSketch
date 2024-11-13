@@ -83,6 +83,19 @@ Matrix4 Matrix4::exp(int n) const {
     return res;
 }
 
+ofMatrix4x4 Matrix4::toOfMatrix4x4() const
+{
+    ofMatrix4x4 result;
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            result(i, j) = matrix[i][j];  // Copie chaque élément dans ofMatrix4x4
+        }
+    }
+
+    return result;
+}
+
 Matrix4 Matrix4::operator+(Matrix4 const& other) const {
     float result[4][4];
     for (int i = 0; i < 4; i++) {

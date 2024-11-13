@@ -79,13 +79,13 @@ void CorpsRigide::clearAccumulators() {
     torqueAccum = Vector(0, 0, 0);
 }
 
-//void CorpsRigide::applyForceAtPoint(const Vector& force, const Vector& point) {
-//    addForce(force);
-//    Vector offset = point - position;
-//    Vector torque = offset.cross(force);
-//    addTorque(torque);
-//}
-//
-//void CorpsRigide::applyTorque(const Vector& torque) {
-//    addTorque(torque);
-//}
+void CorpsRigide::applyForceAtPoint(const Vector& force, const Vector& point) {
+    addForce(force);
+    Vector offset = point - position;
+    Vector torque = produitVectoriel(offset, force);
+    addTorque(torque);
+}
+
+void CorpsRigide::applyTorque(const Vector& torque) {
+    addTorque(torque);
+}

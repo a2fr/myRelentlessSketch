@@ -34,21 +34,61 @@ Quaternion Quaternion::inverse() const
     return Quaternion(conjug.w / norm, conjug.x / norm, conjug.y / norm, conjug.z / norm);
 }
 
-Quaternion Quaternion::operator*(const Quaternion& q) const
-{
-    float w1 = w;
-    Vector v1 = Vector(x, y, z);
-    float w2 = q.w;
-    Vector v2 = Vector(q.x, q.y, q.z);
+//Quaternion Quaternion::operator*(const Quaternion& q) const
+//{
+//    float w1 = w;
+//    Vector v1 = Vector(x, y, z);
+//    float w2 = q.w;
+//    Vector v2 = Vector(q.x, q.y, q.z);
+//
+//    // Calcul de la partie scalaire
+//    float scalarPart = w1 * w2 - produitScalaire(v1, v2);  // produit scalaire entre les vecteurs
+//
+//    // Calcul de la partie vectorielle
+//    Vector vectorPart = (v2 * w1) + (v1 * w2) + produitVectoriel(v1, v2);  // produit vectoriel
+//
+//    return Quaternion(scalarPart, vectorPart.x, vectorPart.y, vectorPart.z);
+//}
 
-    // Calcul de la partie scalaire
-    float scalarPart = w1 * w2 - produitScalaire(v1, v2);  // produit scalaire entre les vecteurs
 
-    // Calcul de la partie vectorielle
-    Vector vectorPart = (v2 * w1) + (v1 * w2) + produitVectoriel(v1, v2);  // produit vectoriel
-
-    return Quaternion(scalarPart, vectorPart.x, vectorPart.y, vectorPart.z);
+Quaternion Quaternion::operator*(const Quaternion& q) const {
+    return Quaternion(
+        w * q.w - x * q.x - y * q.y - z * q.z,
+        w * q.x + x * q.w + y * q.z - z * q.y,
+        w * q.y - x * q.z + y * q.w + z * q.x,
+        w * q.z + x * q.y - y * q.x + z * q.w
+    );
 }
+
+Quaternion& Quaternion::operator*=(const Quaternion& q) {
+    *this = *this * q;
+    return *this;
+}
+
+Quaternion& Quaternion::operator+=(const Quaternion& q) {
+    w += q.w;
+    x += q.x;
+    y += q.y;
+    z += q.z;
+    return *this;
+}
+
+Quaternion Quaternion::operator+(const Quaternion& q) const {
+    return Quaternion(w + q.w, x + q.x, y + q.y, z + q.z);
+}
+
+Quaternion Quaternion::operator*(float scalar) const {
+    return Quaternion(w * scalar, x * scalar, y * scalar, z * scalar);
+}
+
+Quaternion& Quaternion::operator*=(float scalar) {
+    w *= scalar;
+    x *= scalar;
+    y *= scalar;
+    z *= scalar;
+    return *this;
+}
+
 
 Quaternion Quaternion::difference(const Quaternion& q) const
 {

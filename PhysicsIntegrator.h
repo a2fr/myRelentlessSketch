@@ -11,8 +11,8 @@
 
 class PhysicsIntegrator {
 public:
-    //void update(CorpsRigide& corps, double duration);
-    //void addForce(CorpsRigide* corps, const Vector& force);
+    void update(CorpsRigide& corps, double duration);
+    void addForce(CorpsRigide* corps, const Vector& force);
 };
 
 #endif // PHYSICSINTEGRATOR_H

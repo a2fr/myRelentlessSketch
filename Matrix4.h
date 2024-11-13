@@ -2,6 +2,7 @@
 #define MATRIX4_H
 
 #include "Matrix3.h"
+#include "ofMatrix4x4.h"
 
 class Matrix4 {
 public:
@@ -58,6 +59,7 @@ public:
     Matrix4 transposee() const;
     Matrix4 exp(int n) const;
 
+
     Matrix4 operator+(Matrix4 const& other) const;
     void operator+=(Matrix4 const& other);
     Matrix4 operator-(Matrix4 const& other) const;
@@ -67,6 +69,8 @@ public:
     Matrix4 operator*(Matrix4 const& other) const;
     void operator*=(Matrix4 const& other);
     bool operator==(Matrix4 const& other) const;
+
+    ofMatrix4x4 toOfMatrix4x4() const;
 };
 
 
