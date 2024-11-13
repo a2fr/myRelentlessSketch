@@ -4,6 +4,8 @@
 #include "Vector.h"
 #include "Quaternion.h"
 #include "Matrix3.h"
+#include <ofMain.h>
+
 
 class CorpsRigide {
 public:
@@ -46,6 +48,8 @@ public:
 
     void applyForceAtPoint(const Vector& force, const Vector& point);
     void applyTorque(const Vector& torque);
+
+    void draw();
 };
 
 #endif // CORPSRIGIDE_H
