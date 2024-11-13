@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Vector.h"
-
-class Matrix4;
+#include "Matrix4.h"
 
 class Quaternion
 {
@@ -50,6 +49,6 @@ public:
     //Slerp
     Quaternion slerp(const Quaternion& q0, const Quaternion& q1, float t);
 
-    //Matrix4 toMatrix4() const;
+    Matrix4 toMatrix4() const;
 };
 

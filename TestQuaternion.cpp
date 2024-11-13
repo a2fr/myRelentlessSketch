@@ -12,6 +12,7 @@ void TestQuaternion::runTests() {
     testDotProduct();
     testExponentiate();
     testSlerp();
+    testToMatrix4();
 
     std::cout << "Tous les tests sont termines." << std::endl;
 }
@@ -151,4 +152,29 @@ void TestQuaternion::printResult(const std::string& testName, bool passed) {
     else {
         std::cout << testName << " failed." << std::endl;
     }
+}
+
+void TestQuaternion::testToMatrix4() {
+    Quaternion q(0.7071f, 0.7071f, 0, 0); // Quaternion représentant une rotation de 90 degrés autour de l'axe X
+    Matrix4 mat = q.toMatrix4();
+
+    // Valeurs attendues pour la matrice de rotation correspondant à une rotation de 90° autour de l'axe X
+    float expected[4][4] = {
+        {1,    0,     0,    0},
+        {0,    0,    -1,    0},
+        {0,    1,     0,    0},
+        {0,    0,     0,    1}
+    };
+
+    // Vérifier chaque élément de la matrice générée avec une petite tolérance
+    bool passed = true;
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            if (std::abs(mat.matrix[i][j] - expected[i][j]) > 0.0001f) {
+                passed = false;
+            }
+        }
+    }
+
+    printResult("testToMatrix4", passed);
 }

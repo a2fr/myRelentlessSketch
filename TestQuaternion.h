@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Quaternion.h"
+#include "Matrix4.h"
 #include <cassert>
 #include <iostream>
 
@@ -21,6 +22,7 @@ private:
     void testDotProduct();
     void testExponentiate();
     void testSlerp();
+    void testToMatrix4();
 
     void printResult(const std::string& testName, bool passed);
 };
