@@ -1,9 +1,13 @@
+#pragma once
 // PhysicsIntegrator.h
 #ifndef PHYSICSINTEGRATOR_H
 #define PHYSICSINTEGRATOR_H
 
 #include "CorpsRigide.h"
 #include "Vector.h"
+#include "Matrix3.h"
+#include "Matrix4.h"
+#include "Quaternion.h"
 
 class PhysicsIntegrator {
 public:
@@ -12,3 +16,4 @@ public:
 };
 
 #endif // PHYSICSINTEGRATOR_H
+

@@ -1,4 +1,3 @@
-// CorpsRigide.h
 #ifndef CORPSRIGIDE_H
 #define CORPSRIGIDE_H
 
@@ -28,27 +27,26 @@ public:
 
     void setMass(double m);
     void setInertia(double i);
-    void addForce(const Vector& force);
-    void addTorque(const Vector& torque);
-    void integrate(double duration);
+    void setPosition(const Vector& pos);
+    void setInertiaTensor(const Matrix3& inertiaTensor);
+    void setVelocity(const Vector& vel);
+    void setAngularVelocity(const Vector& angVel);
 
     double getMass() const;
     double getInverseMass() const;
     double getInertia() const;
     double getInverseInertia() const;
-
-    void clearAccumulators();
-
-    void setPosition(const Vector& pos);
-    void setInertiaTensor(const Matrix3& inertiaTensor);
     const Vector& getPosition() const;
     const Quaternion& getOrientation() const;
 
-    void setVelocity(const Vector& vel);
-    void setAngularVelocity(const Vector& angVel);
+    void addForce(const Vector& force);
+    void addTorque(const Vector& torque);
+
+    void clearAccumulators();
 
     void applyForceAtPoint(const Vector& force, const Vector& point);
     void applyTorque(const Vector& torque);
 };
 
 #endif // CORPSRIGIDE_H
+

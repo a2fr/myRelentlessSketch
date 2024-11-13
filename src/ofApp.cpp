@@ -29,7 +29,7 @@ void ofApp::setup() {
     box = CorpsRigide();
     box.setPosition(Vector(0, 5, 0));           // Initial position
     box.setMass(1.0f);                          // Set the mass of the box
-    box.setInertiaTensor(Matrix3::identity());  // Initial inertia tensor
+    box.setInertiaTensor(Matrix3::identite());  // Initial inertia tensor
 
     // Apply gravity as a constant force
     physicsIntegrator.addForce(&box, gravity * box.getMass());
@@ -61,6 +61,7 @@ void ofApp::updateGame() {
     if (box.getPosition().y < -10) {
         resetBox();
     }
+
 }
 
 void ofApp::draw() {
@@ -87,6 +88,25 @@ void ofApp::drawMenu() {
     drawNames();
 }
 
+void ofApp::drawGame() {
+    returnButton->Draw();
+
+    // Draw each particle
+    for (Particle* p : particles) {
+        p->draw();
+    }
+    
+    
+    // Dessiner le sol à mi-hauteur de l'écran
+    float groundY = static_cast<float>(3) * ofGetHeight() / 4;
+	// Of draw rectangle to create a ground
+	ofSetColor(110, 59, 29);
+	ofDrawRectangle(0, groundY, ofGetWidth(), ofGetHeight() - groundY);
+    
+	
+    /*ground.draw();*/
+}
+
 void ofApp::drawNames() {
     ofSetColor(255, 255, 255);
     m_creditFont.drawString("Hugo Brisset", 0, ofGetHeight() - 100);
@@ -95,73 +115,22 @@ void ofApp::drawNames() {
     m_creditFont.drawString("Alan Fresco", 0, ofGetHeight() - 10);
 }
 
-// Draw the scene, including the box
-void ofApp::drawGame() {
-    returnButton->Draw();
-    camera.begin();
-
-    ofPushMatrix();
-    ofTranslate(box.getPosition().toOfVec3f());
-    ofMultMatrix(box.getOrientation().toOfMatrix4());  // Apply the box's rotation
-
-    // Draw a small sphere to mark the center of mass
-    ofSetColor(ofColor::black);
-    ofDrawSphere(0, 0, 0, 0.2); // Small sphere at center of mass
-
-    // Define the vertices of the cube
-    glm::vec3 vertices[8] = {
-        glm::vec3(-1, -1, -1), glm::vec3(1, -1, -1), glm::vec3(1, 1, -1), glm::vec3(-1, 1, -1),
-        glm::vec3(-1, -1, 1), glm::vec3(1, -1, 1), glm::vec3(1, 1, 1), glm::vec3(-1, 1, 1)
-    };
-
-    // Define the faces of the cube
-    int faces[6][4] = {
-        {0, 1, 2, 3}, {1, 5, 6, 2}, {5, 4, 7, 6}, {4, 0, 3, 7}, {0, 1, 5, 4}, {3, 2, 6, 7}
-    };
-
-    // Define colors for each face
-    ofColor colors[6] = {
-        ofColor::red, ofColor::green, ofColor::blue,
-        ofColor::yellow, ofColor::cyan, ofColor::magenta
-    };
-
-    // Draw each face with a different color
-    for (int i = 0; i < 6; ++i) {
-        ofSetColor(colors[i]);
-        ofFill();
-        ofBeginShape();
-        for (int j = 0; j < 4; ++j) {
-            ofVertex(vertices[faces[i][j]]);
-        }
-        ofEndShape(true);
-    }
-
-    ofPopMatrix();
-
-    camera.end();
-
-    // Draw the launch force value on the screen
-    ofSetColor(ofColor::white);
-    std::string launchForceText = "Launch Force: " + std::to_string(launchForce);
-    launchForceFont.drawString(launchForceText, 20, 20);
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key){
+    //if (key == ' ') {
+    //    Particle* p = new Particle(Vector(ofRandomWidth(), ofRandomHeight(), 0), ofRandom(0.5f, 2.0f), ofRandom(5, 20));
+    //    particles.push_back(p);
+    //    forceRegistry.add(p, new ParticleGravity(ofVec3f(0, -9.81f, 0)));  // Add gravity to new particle
+    //}
 }
 
-// Reset the box position and velocity when it goes out of bounds
-void ofApp::resetBox() {
-    box.setPosition(Vector(0, 5, 0));         // Reset position
-    box.setVelocity(Vector(0, 0, 0));         // Reset velocity
-    box.setAngularVelocity(Vector(0, 0, 0));  // Reset angular velocity
-    // Reset launch force
-	launchForce = 0.0f;
+//--------------------------------------------------------------
+void ofApp::keyReleased(int key){
+
 }
 
-// Reset the camera position and orientation
-void ofApp::resetCamera() {
-    camera.setPosition(0, 5, 20);      // Reset position
-    camera.lookAt(ofVec3f(0, 0, 0));   // Reset orientation
-}
-
-void ofApp::mouseMoved(int x, int y) {
+//--------------------------------------------------------------
+void ofApp::mouseMoved(int x, int y ){
     if (currentState == MENU) {
         startButton->isHover(x, y);
     }
@@ -170,58 +139,96 @@ void ofApp::mouseMoved(int x, int y) {
     }
 }
 
-// Apply a force at an offset from the center of mass when the user clicks
-void ofApp::mousePressed(int x, int y, int button) {
+//--------------------------------------------------------------
+void ofApp::mouseDragged(int x, int y, int button){
+
+}
+
+void ofApp::resetGame() {
+    // Clear the current particles
+    for (Particle* p : particles) {
+        delete p;
+    }
+    particles.clear();
+
+    // Reinitialize particles
+    particleBlue = new Particle(Vector(1300, 400, 0), 10, 1.0f, ofColor::blue);
+    particleRed = new Particle(Vector(1000, 300, 0), 10, 1.0f, ofColor::red);
+    particleGreen = new Particle(Vector(450, 200, 0), 20, 1.0f, ofColor::green);
+    particleWhite = new Particle(Vector(550, 500, 0), 100, 0.3f, ofColor::white);
+    player = new Player(Vector(100, 100, 0), 10, 1.0f, ofColor::purple);
+
+    // Add the particles to the list
+    particles.push_back(particleBlue);
+    particles.push_back(particleRed);
+    particles.push_back(particleGreen);
+    particles.push_back(particleWhite);
+    particles.push_back(player);
+
+    // Reinitialize force generators
+    gravity = new ParticleGravity(Vector(0, 9.81, 0));
+    float springConstant = 0.2f;
+    float restLength = 200.0f;
+    springRed = new ParticleSpring(particleRed, springConstant, restLength);
+
+    float staticFrictionCoeff = 0.8f; // Increased static friction coefficient
+    float dynamicFrictionCoeff = 0.001f; // Increased dynamic friction coefficient
+    float normalForce = 100.0f; // Example normal force
+    friction = new ParticleFriction(staticFrictionCoeff, dynamicFrictionCoeff, normalForce);
+
+    // Clear the force registry
+    forceRegistry.clear();
+}
+
+//--------------------------------------------------------------
+void ofApp::mousePressed(int x, int y, int button){
     if (currentState == MENU && startButton->isHover(x, y)) {
         currentState = GAME;
     }
     else if (currentState == GAME) {
         if (returnButton->isHover(x, y)) {
+			resetGame();
             currentState = MENU;
-			resetBox();
-			resetCamera();
-        }
-        else {
-            // Calculate the direction of launch from the mouse position
-            glm::vec3 mousePosWorld = camera.screenToWorld(ofVec3f(x, y, 0));
-            Vector direction = (Vector::fromGlmVec3(mousePosWorld) - box.getPosition()).normalize();
-            Vector force = direction * launchForce;
-
-            // Apply the force at an offset from the center of mass
-            Vector offset(0.5f, 0.5f, 0); // Example offset from center
-            box.applyForceAtPoint(force, box.getPosition() + offset);
-
-            // Add a torque based on the offset to induce rotation
-            Vector torque = offset.cross(force) * torqueFactor;
-            box.applyTorque(torque);
         }
     }
 }
 
-// Handle key presses for resetting or adjusting launch force
-void ofApp::keyPressed(int key) {
-    if (currentState == MENU) {
-		// If Enter is pressed, start the game
-		if (key == OF_KEY_RETURN) {
-			currentState = GAME;
-		}
-	}
-    else if (currentState == GAME) {
-        switch (key) {
-        case 'r':
-            cout << "Resetting box position and velocity." << endl;
-            resetBox();
-            resetCamera();
-            break;
-        case OF_KEY_UP:
-            cout << "Up key pressed" << endl;
-            launchForce += 5.0f;
-            break;
-        case OF_KEY_DOWN:
-            cout << "Down key pressed" << endl;
-            launchForce -= 5.0f;
-            if (launchForce < 0) launchForce = 0;
-            break;
-        }
-    }
+//--------------------------------------------------------------
+void ofApp::mouseReleased(int x, int y, int button){
+
 }
+
+//--------------------------------------------------------------
+void ofApp::mouseEntered(int x, int y){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseExited(int x, int y){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::windowResized(int w, int h){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::gotMessage(ofMessage msg){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::dragEvent(ofDragInfo dragInfo){ 
+
+}
+
+//--------------------------------------------------------------
+//void ofApp::exit() {
+//	// Clean up memory by deleting particles and force generators
+//	for (Particle* p : particles) {
+//		delete p;
+//	}
+//	particles.clear();
+//	forceRegistry.clear();
+//}

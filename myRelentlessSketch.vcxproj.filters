@@ -7,16 +7,26 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleGravity.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Vector.cpp" />
-    <ClCompile Include="CorpsRigide.cpp" />
-    <ClCompile Include="Matrix3.cpp" />
-    <ClCompile Include="Matrix3_test.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
+    <ClCompile Include="ParticleForceRegistry.cpp" />
+    <ClCompile Include="ParticleFriction.cpp" />
+    <ClCompile Include="ParticleSpring.cpp" />
+    <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="World.cpp" />
+    <ClCompile Include="MyBlob.cpp" />
+    <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="TestQuaternion.cpp" />
+    <ClCompile Include="Matrix3.cpp" />
     <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="TestMatrix3.cpp" />
+    <ClCompile Include="TestMatrix4.cpp" />
     <ClCompile Include="PhysicsIntegrator.cpp" />
+    <ClCompile Include="CorpsRigide.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -27,13 +37,27 @@
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleForceGenerator.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleGravity.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Vector.h" />
-    <ClInclude Include="CorpsRigide.h" />
-    <ClInclude Include="Matrix3.h" />
+    <ClInclude Include="ParticleForceRegistry.h" />
+    <ClInclude Include="ParticleFriction.h" />
+    <ClInclude Include="ParticleSpring.h" />
+    <ClInclude Include="CollisionSystem.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="World.h" />
+    <ClInclude Include="MyBlob.h" />
+    <ClInclude Include="Ground.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="TestQuaternion.h" />
+    <ClInclude Include="Matrix3.h" />
     <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="TestMatrix3.h" />
+    <ClInclude Include="TestMatrix4.h" />
     <ClInclude Include="PhysicsIntegrator.h" />
+    <ClInclude Include="CorpsRigide.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

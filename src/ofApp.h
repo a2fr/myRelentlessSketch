@@ -11,6 +11,7 @@ enum GameState {
 };
 
 class ofApp : public ofBaseApp {
+
 public:
     // Standard openFrameworks methods
     void setup() override;
@@ -18,7 +19,7 @@ public:
     void draw() override;
 
     // Event handlers for interaction
-	void mouseMoved(int x, int y) override;
+    void mouseMoved(int x, int y) override;
     void mousePressed(int x, int y, int button) override;
     void keyPressed(int key) override;
 
@@ -45,7 +46,7 @@ private:
 
     // Helper methods
     void resetBox();                  // Reset the box's position and rotation
-	void resetCamera();               // Reset the camera position and orientation
+    void resetCamera();               // Reset the camera position and orientation
 
     // Game parameters
     float launchForce;                // Magnitude of the launch force

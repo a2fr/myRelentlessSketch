@@ -1,9 +1,6 @@
 // PhysicsIntegrator.cpp
 #include "PhysicsIntegrator.h"
-#include "Matrix3.h"
-#include "Matrix4.h"
-#include "Quaternion.h"
-#include "Vector.h"
+
 
 void PhysicsIntegrator::update(CorpsRigide& corps, double duration) {
     if (corps.getInverseMass() <= 0.0) return; // Immovable object

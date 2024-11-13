@@ -13,6 +13,11 @@ Matrix3 Matrix3::inverse() const {
     // computes the inverse of a matrix m
     double det = determinant();
 
+    if (det == 0) {
+        std::cerr << "La matrice n'est pas inversible." << std::endl;
+        return Matrix3();
+    }
+
     double invdet = 1 / det;
 
     Matrix3 minv; // inverse of matrix m
@@ -140,17 +145,5 @@ void Matrix3::operator*=(Matrix3 const& matrix) {
 }
 
 bool Matrix3::operator==(Matrix3 const& matrix) const {
-    return this->x1 == matrix.x1
-        && this->x2 == matrix.x2
-        && this->x3 == matrix.x3
-        && this->y1 == matrix.y1
-        && this->y2 == matrix.y2
-        && this->y3 == matrix.y3
-        && this->z1 == matrix.z1
-        && this->z2 == matrix.z2
-        && this->z3 == matrix.z3;
-}
-
-Matrix3 Matrix3::identity() {
-	return Matrix3(1, 0, 0, 0, 1, 0, 0, 0, 1);
+    return this->x1 == matrix.x1 && this->x2 == matrix.x2 && this->x3 == matrix.x3 && this->y1 == matrix.y1 && this->y2 == matrix.y2 && this->y3 == matrix.y3 && this->z1 == matrix.z1 && this->z2 == matrix.z2 && this->z3 == matrix.z3;
 }
