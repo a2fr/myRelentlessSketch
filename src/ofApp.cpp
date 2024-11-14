@@ -198,8 +198,14 @@ void ofApp::drawGame() {
     }
 
     ofPopMatrix();
-    
+
     camera.end();
+
+    ofSetColor(255, 0, 0);
+    glm::uvec2 center(ofGetWidth() / 2, ofGetHeight() / 2);
+    int sizeBranch = 10;
+    ofDrawLine(center + glm::vec2(-sizeBranch, 0), center + glm::vec2(sizeBranch, 0));
+    ofDrawLine(center + glm::vec2(0, -sizeBranch), center + glm::vec2(0, sizeBranch));
 
     // Draw the launch force value on the screen
     ofSetColor(ofColor::white);
