@@ -4,6 +4,7 @@
 #include "..\CorpsRigide.h"         // Your rigid body class
 #include "..\PhysicsIntegrator.h"   // The physics integrator for handling forces
 #include "..\Button.h"
+#include "..\Skybox.h"
 
 enum GameState {
     MENU,
@@ -21,6 +22,7 @@ public:
     void mouseMoved(int x, int y) override;
     void mousePressed(int x, int y, int button) override;
     void keyPressed(int key) override;
+    void keyReleased(int key) override;
 
     void drawMenu();
     void drawGame();
@@ -36,7 +38,7 @@ private:
     ofTrueTypeFont m_creditFont;
     ofTrueTypeFont launchForceFont;
 
-    // Camera for 3D perspective
+    // Mouvement et vue du personnage
     ofEasyCam camera;
 
     // Physics components
@@ -51,4 +53,6 @@ private:
     float launchForce;                // Magnitude of the launch force
     Vector gravity;                   // Gravity vector
     float torqueFactor;               // Scaling factor for applied torque
+
+    Skybox skybox;
 };

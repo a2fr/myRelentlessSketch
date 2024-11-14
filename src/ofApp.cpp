@@ -1,10 +1,18 @@
 #include "ofApp.h"
+#include <windows.h>
 
 // Settings for the shooting game
 float launchForce = 20.0f;
 Vector launchPosition(0, 0, 0);
 Vector gravity(0, -9.81f, 0);
 float torqueFactor = 0.1f;
+
+// Camera
+float moveSpeed = 0.5f;
+float sensitivity = 0.1f; // Ajuste la sensibilité de la rotation
+float pitch = 0.0f, yaw = 0.0f;
+glm::vec2 lastMousePos;
+bool keys[6] = { false, false, false, false, false, false }; // Z, Q, S, D, R, F
 
 // Setup the application window and scene
 void ofApp::setup() {
@@ -21,6 +29,9 @@ void ofApp::setup() {
     ofBackground(30, 30, 30);
     camera.setPosition(0, 5, 20);      // Position the camera
     camera.lookAt(ofVec3f(0, 0, 0));   // Look at the center of the scene
+    camera.setNearClip(0.01f);
+    lastMousePos = glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2);
+    SetCursorPos(lastMousePos.x, lastMousePos.y); // Centre la souris au début
 
     // Initialize physics integrator and objects
     physicsIntegrator = PhysicsIntegrator();
@@ -33,6 +44,8 @@ void ofApp::setup() {
 
     // Apply gravity as a constant force
     physicsIntegrator.addForce(&box, gravity * box.getMass());
+
+    skybox.setup();
 }
 
 // Update the scene with physics calculations
@@ -54,13 +67,49 @@ void ofApp::updateMenu() {
 }
 
 void ofApp::updateGame() {
+    // Récupérer la direction de la caméra
+    glm::vec3 forward = camera.getLookAtDir(); // Direction vers l'avant
+    glm::vec3 right = glm::cross(forward, glm::vec3(0, 1, 0)); // Direction à droite
+    glm::vec3 up(0, 1, 0); // Vers le haut
+
+    glm::vec3 moveDirection = glm::vec3(0.0f); // Reset du vecteur de direction
+
+    // Ajuster les directions en fonction des touches
+    if (keys[0]) moveDirection += forward * moveSpeed; // Z - Avancer
+    if (keys[2]) moveDirection -= forward * moveSpeed; // S - Reculer
+    if (keys[1]) moveDirection -= right * moveSpeed;   // Q - Gauche
+    if (keys[3]) moveDirection += right * moveSpeed;   // D - Droite
+    if (keys[4]) moveDirection += up * moveSpeed;      // R - Monter
+    if (keys[5]) moveDirection -= up * moveSpeed;      // F - Descendre
+
+    // Appliquer le déplacement à la position de la caméra
+    camera.setPosition(camera.getPosition() + moveDirection);
+
+    glm::vec2 mousePos(ofGetMouseX(), ofGetMouseY());
+
+    // Calculer la différence (déplacement) de la souris
+    glm::vec2 delta = mousePos - lastMousePos;
+
+    // Appliquer la sensibilité et mettre à jour les angles de rotation
+    yaw = -delta.x * sensitivity;
+    pitch = -delta.y * sensitivity;
+
+    // Limiter l'angle de pitch pour éviter les retournements
+    pitch = ofClamp(pitch, -89.0f, 89.0f);
+
+    // Appliquer les rotations de la caméra
+    camera.setOrientation(glm::quat(glm::vec3(glm::radians(pitch), glm::radians(yaw), 0.0f)));
+
+    SetCursorPos(ofGetWidth() / 2, ofGetHeight() / 2);
+    lastMousePos = glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2);
+
     // Update physics simulation
     physicsIntegrator.update(box, ofGetLastFrameTime());
 
     // Check if the box goes out of bounds and reset it if necessary
-    if (box.getPosition().y < -10) {
-        resetBox();
-    }
+    //if (box.getPosition().y < -10) {
+    //    resetBox();
+    //}
 }
 
 void ofApp::draw() {
@@ -97,9 +146,21 @@ void ofApp::drawNames() {
 
 // Draw the scene, including the box
 void ofApp::drawGame() {
+    ofBackground(0);  // Fond noir
+    skybox.draw();
+
     returnButton->Draw();
     camera.begin();
 
+    // Dessiner le sol
+    ofSetColor(100, 200, 100); // Couleur verte pour le sol
+    float width = 500.0f;  // Largeur du sol
+    float depth = 500.0f;  // Profondeur du sol
+    float yPos = -10.0f;   // Position en hauteur (y)
+
+    ofDrawBox(glm::vec3(0, yPos, 0), 500, 1, 500);
+
+    // Cube
     ofPushMatrix();
     ofTranslate(box.getPosition().getGlmVec());
     ofMultMatrix(box.getOrientation().toMatrix4().toOfMatrix4x4());  // Apply the box's rotation
@@ -137,7 +198,7 @@ void ofApp::drawGame() {
     }
 
     ofPopMatrix();
-
+    
     camera.end();
 
     // Draw the launch force value on the screen
@@ -174,12 +235,15 @@ void ofApp::mouseMoved(int x, int y) {
 void ofApp::mousePressed(int x, int y, int button) {
     if (currentState == MENU && startButton->isHover(x, y)) {
         currentState = GAME;
+        ofHideCursor(); // Cache le curseur de la souris
+        SetCursorPos(ofGetWidth() / 2, ofGetHeight() / 2);
     }
     else if (currentState == GAME) {
         if (returnButton->isHover(x, y)) {
             currentState = MENU;
             resetBox();
             resetCamera();
+            ofShowCursor();
         }
         else {
             Vector mousePosWorld = Vector(x,y,0);
@@ -208,8 +272,14 @@ void ofApp::keyPressed(int key) {
         }
     }
     else if (currentState == GAME) {
+        if (key == 'z') keys[0] = true;
+        if (key == 'q') keys[1] = true;
+        if (key == 's') keys[2] = true;
+        if (key == 'd') keys[3] = true;
+        if (key == 'r') keys[4] = true;
+        if (key == 'f') keys[5] = true;
         switch (key) {
-        case 'r':
+        case OF_KEY_RETURN:
             cout << "Resetting box position and velocity." << endl;
             resetBox();
             resetCamera();
@@ -225,4 +295,13 @@ void ofApp::keyPressed(int key) {
             break;
         }
     }
+}
+
+void ofApp::keyReleased(int key) {
+    if (key == 'z') keys[0] = false;
+    if (key == 'q') keys[1] = false;
+    if (key == 's') keys[2] = false;
+    if (key == 'd') keys[3] = false;
+    if (key == 'r') keys[4] = false;
+    if (key == 'f') keys[5] = false;
 }

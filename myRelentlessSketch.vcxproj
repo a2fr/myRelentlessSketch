@@ -119,6 +119,7 @@
     <ClCompile Include="PhysicsIntegrator.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="TestMatrix3.cpp" />
@@ -144,6 +145,7 @@
     <ClInclude Include="PhysicsIntegrator.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="TestMatrix3.h" />
     <ClInclude Include="TestMatrix4.h" />

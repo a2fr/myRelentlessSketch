@@ -27,6 +27,7 @@
     <ClCompile Include="TestMatrix4.cpp" />
     <ClCompile Include="PhysicsIntegrator.cpp" />
     <ClCompile Include="CorpsRigide.cpp" />
+    <ClCompile Include="Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -58,6 +59,7 @@
     <ClInclude Include="TestMatrix4.h" />
     <ClInclude Include="PhysicsIntegrator.h" />
     <ClInclude Include="CorpsRigide.h" />
+    <ClInclude Include="Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
