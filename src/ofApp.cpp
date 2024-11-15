@@ -169,6 +169,12 @@ void ofApp::drawGame() {
     ofDrawBox(glm::vec3(0, yPos, 0), 500, 1, 500);
     ofDrawGrid(1, 1000, false, false, true, false);
 
+    // Trace
+    ofSetColor(255, 0, 0);
+    for (auto point : box.trace) {
+        ofDrawSphere(point.getGlmVec(), 0.3);
+    }
+
     // Cube
     ofPushMatrix();
     ofTranslate(box.getPosition().getGlmVec());
@@ -203,11 +209,6 @@ void ofApp::drawGame() {
     }
 
     ofPopMatrix();
-
-    ofSetColor(255, 0, 0);
-    for (auto point : box.trace) {
-        ofDrawSphere(point.getGlmVec(), 0.3);
-    }
 
     camera.end();
 
