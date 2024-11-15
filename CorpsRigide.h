@@ -3,7 +3,10 @@
 
 #include "Vector.h"
 #include "Quaternion.h"
+#include <vector>
 #include "Matrix3.h"
+
+using namespace std;
 
 class CorpsRigide {
 public:
@@ -13,6 +16,7 @@ public:
     double inverseInertia;
 
     Vector position;
+    Vector centerMass; // Coordonnées relatives a la position de l'objet. Si le centre de l'objet est le centre de masse alors centreMasse = Vector(0, 0, 0)
     Vector velocity;
     Vector acceleration;
     Vector forceAccum;
@@ -22,10 +26,18 @@ public:
     Vector angularAcceleration;
     Vector torqueAccum;
 
+    vector<Vector> trace;
+    float tracePeriode = 50;
+    int maxPointsInTrace = 20;
+    int countTrace = 0;
+    bool isGravityActivated = false;
+
     CorpsRigide();
     CorpsRigide(double mass, double inertia);
+    CorpsRigide(const Vector& centerMass, double mass, double inertia);
 
     void setMass(double m);
+    void setCenterMass(const Vector& centerMass);
     void setInertia(double i);
     void setPosition(const Vector& pos);
     void setInertiaTensor(const Matrix3& inertiaTensor);

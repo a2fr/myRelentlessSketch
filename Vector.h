@@ -16,6 +16,7 @@ public:
     // Constructeurs
     Vector();
     Vector(double x, double y, double z);
+    Vector(const glm::vec3& v);
 
     float getX() const { return x; };
     float getY() const { return y; };

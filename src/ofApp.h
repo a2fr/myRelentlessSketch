@@ -37,6 +37,7 @@ private:
     ofTrueTypeFont titleFont;
     ofTrueTypeFont m_creditFont;
     ofTrueTypeFont launchForceFont;
+    ofTrueTypeFont controlsFont;
 
     // Mouvement et vue du personnage
     ofEasyCam camera;
@@ -50,9 +51,7 @@ private:
     void resetCamera();               // Reset the camera position and orientation
 
     // Game parameters
-    float launchForce;                // Magnitude of the launch force
-    Vector gravity;                   // Gravity vector
-    float torqueFactor;               // Scaling factor for applied torque
+    float launchForce = 100;                // Magnitude of the launch force
 
     Skybox skybox;
 };

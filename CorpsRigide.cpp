@@ -5,9 +5,18 @@ forceAccum(0, 0, 0), orientation(1, 0, 0, 0), angularVelocity(0, 0, 0), angularA
 torqueAccum(0, 0, 0) {
     setMass(mass);
     setInertia(inertia);
+    centerMass = Vector(position);
 }
 
 CorpsRigide::CorpsRigide(double mass, double inertia) : position(0, 0, 0), velocity(0, 0, 0), acceleration(0, 0, 0),
+forceAccum(0, 0, 0), orientation(1, 0, 0, 0), angularVelocity(0, 0, 0),
+angularAcceleration(0, 0, 0), torqueAccum(0, 0, 0) {
+    setMass(mass);
+    setInertia(inertia);
+    centerMass = position;
+}
+
+CorpsRigide::CorpsRigide(const Vector& centerMass, double mass, double inertia) : position(0, 0, 0), centerMass(centerMass), velocity(0, 0, 0), acceleration(0, 0, 0),
 forceAccum(0, 0, 0), orientation(1, 0, 0, 0), angularVelocity(0, 0, 0),
 angularAcceleration(0, 0, 0), torqueAccum(0, 0, 0) {
     setMass(mass);
@@ -17,6 +26,11 @@ angularAcceleration(0, 0, 0), torqueAccum(0, 0, 0) {
 void CorpsRigide::setMass(double m) {
     mass = m;
     inverseMass = (mass > 0.0) ? 1.0 / mass : 0.0;
+}
+
+void CorpsRigide::setCenterMass(const Vector& centerMass)
+{
+    this->centerMass = centerMass;
 }
 
 void CorpsRigide::setInertia(double i) {
@@ -80,8 +94,10 @@ void CorpsRigide::clearAccumulators() {
 }
 
 void CorpsRigide::applyForceAtPoint(const Vector& force, const Vector& point) {
+    isGravityActivated = true;
     addForce(force);
-    Vector offset = point - position;
+    forceAccum.afficher();
+    Vector offset = point - (position + centerMass);
     Vector torque = produitVectoriel(offset, force);
     addTorque(torque);
 }
