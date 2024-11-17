@@ -11,9 +11,9 @@ using namespace std;
 class CorpsRigide {
 public:
     double mass;
-    double inertia;
+    Matrix3 inertia;
     double inverseMass;
-    double inverseInertia;
+    Matrix3 inverseInertia;
 
     Vector position;
     Vector centerMass; // Coordonnées relatives a la position de l'objet. Si le centre de l'objet est le centre de masse alors centreMasse = Vector(0, 0, 0)
@@ -32,13 +32,8 @@ public:
     int countTrace = 0;
     bool isGravityActivated = false;
 
-    CorpsRigide();
-    CorpsRigide(double mass, double inertia);
-    CorpsRigide(const Vector& centerMass, double mass, double inertia);
-
     void setMass(double m);
     void setCenterMass(const Vector& centerMass);
-    void setInertia(double i);
     void setPosition(const Vector& pos);
     void setInertiaTensor(const Matrix3& inertiaTensor);
     void setVelocity(const Vector& vel);
@@ -46,8 +41,8 @@ public:
 
     double getMass() const;
     double getInverseMass() const;
-    double getInertia() const;
-    double getInverseInertia() const;
+    Matrix3 getInertia() const;
+    Matrix3 getInverseInertia() const;
     const Vector& getPosition() const;
     const Quaternion& getOrientation() const;
 
@@ -58,6 +53,8 @@ public:
 
     void applyForceAtPoint(const Vector& force, const Vector& point);
     void applyTorque(const Vector& torque);
+
+    virtual void draw() = 0;
 };
 
 #endif // CORPSRIGIDE_H

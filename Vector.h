@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "glm/vec3.hpp"
+#include "Matrix3.h"
 #include <math.h>
 
 class Vector
@@ -50,6 +51,8 @@ Vector operator+(const Vector& v1, const Vector& v2);
 Vector operator-(const Vector& v1, const Vector& v2);
 Vector operator*(Vector const& v1, Vector const& v2);
 Vector operator*(const Vector& vec, double num);
+Vector operator*(double num, Vector const& vec);
+Vector operator*(Vector const& v, Matrix3 const& m);
 Vector operator/(const Vector& vec, double num);
 Vector operator-(const Vector& vec);
 bool operator==(const Vector& v1, const Vector& v2);

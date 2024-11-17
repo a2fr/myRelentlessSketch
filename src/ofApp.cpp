@@ -1,5 +1,6 @@
-#include "ofApp.h"
+ï»¿#include "..\CorpsRigide.h"         // Your rigid body class
 #include <windows.h>
+#include "ofApp.h"
 
 // Settings for the shooting game
 float torqueFactor = 0.1f;
@@ -7,9 +8,12 @@ float torqueFactor = 0.1f;
 // Camera
 bool isFocused = true;
 float moveSpeed = 0.5f;
-float sensitivity = 0.1f; // Ajuste la sensibilité de la rotation
+float sensitivity = 0.1f; // Ajuste la sensibilite de la rotation
 glm::vec2 centerOfTheScreen;
 bool keys[6] = { false, false, false, false, false, false }; // W, A, S, D, R, F
+
+// Object that the user see in game
+CorpsRigide* currentObject;
 
 // Setup the application window and scene
 void ofApp::setup() {
@@ -25,24 +29,20 @@ void ofApp::setup() {
     returnButton = new Button("RETURN", ofRectangle(ofGetWidth() - 120, 10, 100, 25), false);
 
     // Configure the camera
-    camera.setPosition(0, 5, 20);      // Position the camera
+    camera.setPosition(0, 1.85, 20);      // Position the camera
     camera.lookAt(ofVec3f(0, 0, 0));   // Look at the center of the scene
     camera.setNearClip(1.0f);
     centerOfTheScreen = glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2);
-    SetCursorPos(centerOfTheScreen.x, centerOfTheScreen.y); // Centre la souris au début
+    SetCursorPos(centerOfTheScreen.x, centerOfTheScreen.y); // Centre la souris au debut
 
     // Initialize physics integrator and objects
     physicsIntegrator = PhysicsIntegrator();
 
-    // Create a box and initialize its position, velocity, and angular velocity
-    box = CorpsRigide();
-    box.setPosition(Vector(0, 5, 0));           // Initial position
-    box.setMass(0.1f);                          // Set the mass of the box
-    box.setCenterMass(Vector(1, 1, 1));
-    box.setInertiaTensor(Matrix3::identite());  // Initial inertia tensor
-
     skybox.setup();
+
+    currentObject = &cube;
 }
+
 
 // Update the scene with physics calculations
 void ofApp::update() {
@@ -63,9 +63,9 @@ void ofApp::updateMenu() {
 }
 
 void ofApp::updateGame() {
-    // Récupérer la direction de la caméra
+    // Recuperer la direction de la camera
     glm::vec3 forward = camera.getLookAtDir(); // Direction vers l'avant
-    glm::vec3 right = glm::cross(forward, glm::vec3(0, 1, 0)); // Direction à droite
+    glm::vec3 right = glm::cross(forward, glm::vec3(0, 1, 0)); // Direction a droite
     glm::vec3 up(0, 1, 0); // Vers le haut
 
     glm::vec3 moveDirection = glm::vec3(0.0f); // Reset du vecteur de direction
@@ -78,7 +78,7 @@ void ofApp::updateGame() {
     if (keys[4]) moveDirection += up * moveSpeed;      // R - Monter
     if (keys[5]) moveDirection -= up * moveSpeed;      // F - Descendre
 
-    // Appliquer le déplacement à la position de la caméra
+    // Appliquer le deplacement a la position de la camï¿½ra
     glm::vec3 newPos = (camera.getPosition() + moveDirection);
     if (newPos.y < 1.85)
         newPos.y = 1.85; // Hauteur de mes yeux
@@ -92,31 +92,31 @@ void ofApp::updateGame() {
         mousePos = glm::vec2(centerOfTheScreen.x, centerOfTheScreen.y);
     }
 
-    // Calculer la différence (déplacement) de la souris
+    // Calculer la difference (dï¿½placement) de la souris
     glm::vec2 delta = mousePos - centerOfTheScreen;
 
-    // Appliquer la sensibilité et mettre à jour les angles de rotation
+    // Appliquer la sensibilite et mettre a jour les angles de rotation
     float yaw = -delta.x * sensitivity;
     float pitch = -delta.y * sensitivity;
 
-    // Limiter l'angle de pitch pour éviter les retournements
+    // Limiter l'angle de pitch pour eviter les retournements
     pitch = ofClamp(pitch, -89.0f, 89.0f);
 
-    // Appliquer les rotations de la caméra
+    // Appliquer les rotations de la camï¿½ra
     camera.setOrientation(glm::quat(glm::vec3(glm::radians(pitch), glm::radians(yaw), 0.0f)));
 
-    // Recentrer la souris au milieu de l'écran
+    // Recentrer la souris au milieu de l'ï¿½cran
     if (isFocused)
         SetCursorPos(centerOfTheScreen.x, centerOfTheScreen.y);
 
     // Update physics simulation
-    physicsIntegrator.update(box, ofGetLastFrameTime());
+    physicsIntegrator.update(*currentObject, ofGetLastFrameTime());
 
     // Check if the box goes out of bounds and reset it if necessary
-    if (box.getPosition().y < 0) {
-        box.setPosition(Vector(box.getPosition().x, 0, box.getPosition().z));
-        box.setAngularVelocity(Vector(0, 0, 0));
-        box.setVelocity(Vector(0, 0, 0));
+    if (currentObject->getPosition().y < 0) {
+        currentObject->setPosition(Vector(currentObject->getPosition().x, 0, currentObject->getPosition().z));
+        currentObject->setAngularVelocity(Vector(0, 0, 0));
+        currentObject->setVelocity(Vector(0, 0, 0));
     }
 }
 
@@ -171,44 +171,12 @@ void ofApp::drawGame() {
 
     // Trace
     ofSetColor(255, 0, 0);
-    for (auto point : box.trace) {
+    for (auto const& point : currentObject->trace) {
         ofDrawSphere(point.getGlmVec(), 0.3);
     }
 
-    // Cube
-    ofPushMatrix();
-    ofTranslate(box.getPosition().getGlmVec());
-    ofMultMatrix(box.getOrientation().toMatrix4().toOfMatrix4x4());  // Apply the box's rotation
-
-    // Define the vertices of the cube
-    glm::vec3 vertices[8] = {
-        glm::vec3(-1, -1, -1), glm::vec3(1, -1, -1), glm::vec3(1, 1, -1), glm::vec3(-1, 1, -1),
-        glm::vec3(-1, -1, 1), glm::vec3(1, -1, 1), glm::vec3(1, 1, 1), glm::vec3(-1, 1, 1)
-    };
-
-    // Define the faces of the cube
-    int faces[6][4] = {
-        {0, 1, 2, 3}, {1, 5, 6, 2}, {5, 4, 7, 6}, {4, 0, 3, 7}, {0, 1, 5, 4}, {3, 2, 6, 7}
-    };
-
-    // Define colors for each face
-    ofColor colors[6] = {
-        ofColor::red, ofColor::green, ofColor::blue,
-        ofColor::yellow, ofColor::cyan, ofColor::magenta
-    };
-
-    // Draw each face with a different color
-    for (int i = 0; i < 6; ++i) {
-        ofSetColor(colors[i]);
-        ofFill();
-        ofBeginShape();
-        for (int j = 0; j < 4; ++j) {
-            ofVertex(vertices[faces[i][j]]);
-        }
-        ofEndShape(true);
-    }
-
-    ofPopMatrix();
+    // Draw the current object
+    currentObject->draw();
 
     camera.end();
 
@@ -240,16 +208,22 @@ void ofApp::drawGame() {
     controlsFont.drawString(text, 20, 140);
     text = "Q - focus / unfocus";
     controlsFont.drawString(text, 20, 155);
+    text = "J - switch to Cube";
+    controlsFont.drawString(text, 20, 170);
+    text = "K - switch to Cylindre";
+    controlsFont.drawString(text, 20, 185);
+    text = "L - switch to PaveDroit";
+    controlsFont.drawString(text, 20, 200);
 }
 
 // Reset the box position and velocity when it goes out of bounds
 void ofApp::resetBox() {
-    box.setPosition(Vector(0, 5, 0));         // Reset position
-    box.setVelocity(Vector(0, 0, 0));         // Reset velocity
-    box.setAngularVelocity(Vector(0, 0, 0));  // Reset angular velocity
-    box.orientation = Quaternion(1, 0, 0, 0);
-    box.isGravityActivated = false;
-    box.trace = vector<Vector>();
+    currentObject->setPosition(Vector(0, 5, 0));         // Reset position
+    currentObject->setVelocity(Vector(0, 0, 0));         // Reset velocity
+    currentObject->setAngularVelocity(Vector(0, 0, 0));  // Reset angular velocity
+    currentObject->orientation = Quaternion(1, 0, 0, 0);
+    currentObject->isGravityActivated = false;
+    currentObject->trace = vector<Vector>();
     // Reset launch force
     launchForce = 100.0f;
 }
@@ -286,16 +260,11 @@ void ofApp::mousePressed(int x, int y, int button) {
         }
         else {
             // Calculate the direction of launch from the mouse position
-            Vector direction = (box.getPosition() - Vector(camera.getPosition())).normalize();
+            Vector direction = (currentObject->getPosition() - Vector(camera.getPosition())).normalize();
             Vector force = direction * launchForce;
 
             // Apply the force at an offset from the center of mass
-            Vector offset(0, 0, 0); // Example offset from center
-            box.applyForceAtPoint(force, box.getPosition() + offset - direction);
-
-            // Add a torque based on the offset to induce rotation
-            Vector torque = produitVectoriel(offset, force) * torqueFactor;
-            box.applyTorque(torque);
+            currentObject->applyForceAtPoint(force, currentObject->getPosition() + direction);
         }
     }
 }
@@ -339,6 +308,15 @@ void ofApp::keyPressed(int key) {
             cout << "Down key pressed" << endl;
             launchForce -= 5.0f;
             if (launchForce < 0) launchForce = 0;
+            break;
+        case 'j':
+            currentObject = &cube;
+            break;
+        case 'k':
+            currentObject = &cylindre;
+            break;
+        case 'l':
+            currentObject = &paveDroit;
             break;
         }
     }

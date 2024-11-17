@@ -1,10 +1,12 @@
 #pragma once
 
 #include "ofMain.h"
-#include "..\CorpsRigide.h"         // Your rigid body class
 #include "..\PhysicsIntegrator.h"   // The physics integrator for handling forces
 #include "..\Button.h"
 #include "..\Skybox.h"
+#include "..\Cube.h"
+#include "..\Cylindre.h"
+#include "..\PaveDroit.h"
 
 enum GameState {
     MENU,
@@ -43,7 +45,6 @@ private:
     ofEasyCam camera;
 
     // Physics components
-    CorpsRigide box;                  // Rigid body for the box
     PhysicsIntegrator physicsIntegrator; // Manages forces and updates on the rigid body
 
     // Helper methods
@@ -51,7 +52,10 @@ private:
     void resetCamera();               // Reset the camera position and orientation
 
     // Game parameters
-    float launchForce = 100;                // Magnitude of the launch force
+    float launchForce = 200;                // Magnitude of the launch force
 
     Skybox skybox;
+    Cube& cube = Cube();
+    Cylindre& cylindre = Cylindre();
+    PaveDroit& paveDroit = PaveDroit();
 };

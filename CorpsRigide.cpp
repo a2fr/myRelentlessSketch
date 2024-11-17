@@ -1,28 +1,5 @@
 #include "CorpsRigide.h"
 
-CorpsRigide::CorpsRigide() : mass(1.0), inertia(1.0), position(0, 0, 0), velocity(0, 0, 0), acceleration(0, 0, 0),
-forceAccum(0, 0, 0), orientation(1, 0, 0, 0), angularVelocity(0, 0, 0), angularAcceleration(0, 0, 0),
-torqueAccum(0, 0, 0) {
-    setMass(mass);
-    setInertia(inertia);
-    centerMass = Vector(position);
-}
-
-CorpsRigide::CorpsRigide(double mass, double inertia) : position(0, 0, 0), velocity(0, 0, 0), acceleration(0, 0, 0),
-forceAccum(0, 0, 0), orientation(1, 0, 0, 0), angularVelocity(0, 0, 0),
-angularAcceleration(0, 0, 0), torqueAccum(0, 0, 0) {
-    setMass(mass);
-    setInertia(inertia);
-    centerMass = position;
-}
-
-CorpsRigide::CorpsRigide(const Vector& centerMass, double mass, double inertia) : position(0, 0, 0), centerMass(centerMass), velocity(0, 0, 0), acceleration(0, 0, 0),
-forceAccum(0, 0, 0), orientation(1, 0, 0, 0), angularVelocity(0, 0, 0),
-angularAcceleration(0, 0, 0), torqueAccum(0, 0, 0) {
-    setMass(mass);
-    setInertia(inertia);
-}
-
 void CorpsRigide::setMass(double m) {
     mass = m;
     inverseMass = (mass > 0.0) ? 1.0 / mass : 0.0;
@@ -33,18 +10,20 @@ void CorpsRigide::setCenterMass(const Vector& centerMass)
     this->centerMass = centerMass;
 }
 
+/*
 void CorpsRigide::setInertia(double i) {
     inertia = i;
     inverseInertia = (inertia > 0.0) ? 1.0 / inertia : 0.0;
 }
+*/
 
 void CorpsRigide::setPosition(const Vector& pos) {
     position = pos;
 }
 
 void CorpsRigide::setInertiaTensor(const Matrix3& inertiaTensor) {
-    inertia = inertiaTensor.determinant();
-    inverseInertia = (inertia > 0.0) ? 1.0 / inertia : 0.0;
+    inertia = inertiaTensor;
+    inverseInertia = inertia.inverse();
 }
 
 void CorpsRigide::setVelocity(const Vector& vel) {
@@ -64,11 +43,11 @@ double CorpsRigide::getInverseMass() const {
     return inverseMass;
 }
 
-double CorpsRigide::getInertia() const {
+Matrix3 CorpsRigide::getInertia() const {
     return inertia;
 }
 
-double CorpsRigide::getInverseInertia() const {
+Matrix3 CorpsRigide::getInverseInertia() const {
     return inverseInertia;
 }
 
@@ -98,7 +77,7 @@ void CorpsRigide::applyForceAtPoint(const Vector& force, const Vector& point) {
     addForce(force);
     forceAccum.afficher();
     Vector offset = point - (position + centerMass);
-    Vector torque = produitVectoriel(offset, force);
+    Vector torque = produitVectoriel(offset, force) * 0.3;
     addTorque(torque);
 }
 

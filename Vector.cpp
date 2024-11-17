@@ -116,6 +116,22 @@ Vector operator*(const Vector& vec, double num)
     return copie;
 }
 
+Vector operator*(double num, Vector const& vec)
+{
+    Vector copie(vec);
+    copie *= num;
+    return copie;
+}
+
+Vector operator*(Vector const& v, Matrix3 const& m)
+{
+    Vector result;
+    result.x = v.x * m.x1 + v.y * m.x2 + v.z * m.x3;
+    result.y = v.x * m.y1 + v.y * m.y2 + v.z * m.y3;
+    result.z = v.x * m.z1 + v.y * m.z2 + v.z * m.z3;
+    return result;
+}
+
 Vector operator/(const Vector& vec, double num)
 {
     Vector copie(vec);

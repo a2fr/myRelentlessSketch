@@ -28,6 +28,9 @@
     <ClCompile Include="PhysicsIntegrator.cpp" />
     <ClCompile Include="CorpsRigide.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Cylindre.cpp" />
+    <ClCompile Include="PaveDroit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -60,6 +63,9 @@
     <ClInclude Include="PhysicsIntegrator.h" />
     <ClInclude Include="CorpsRigide.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="Cube.h" />
+    <ClInclude Include="Cylindre.h" />
+    <ClInclude Include="PaveDroit.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

@@ -107,6 +107,8 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="CorpsRigide.cpp" />
+    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Cylindre.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Matrix3.cpp" />
     <ClCompile Include="Matrix4.cpp" />
@@ -116,6 +118,7 @@
     <ClCompile Include="ParticleForceRegistry.cpp" />
     <ClCompile Include="ParticleGravity.cpp" />
     <ClCompile Include="ParticleSpring.cpp" />
+    <ClCompile Include="PaveDroit.cpp" />
     <ClCompile Include="PhysicsIntegrator.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Quaternion.cpp" />
@@ -132,6 +135,8 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="CorpsRigide.h" />
+    <ClInclude Include="Cube.h" />
+    <ClInclude Include="Cylindre.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Matrix3.h" />
     <ClInclude Include="Matrix4.h" />
@@ -142,6 +147,7 @@
     <ClInclude Include="ParticleForceRegistry.h" />
     <ClInclude Include="ParticleGravity.h" />
     <ClInclude Include="ParticleSpring.h" />
+    <ClInclude Include="PaveDroit.h" />
     <ClInclude Include="PhysicsIntegrator.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Quaternion.h" />
