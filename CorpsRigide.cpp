@@ -75,7 +75,6 @@ void CorpsRigide::clearAccumulators() {
 void CorpsRigide::applyForceAtPoint(const Vector& force, const Vector& point) {
     isGravityActivated = true;
     addForce(force);
-    forceAccum.afficher();
     Vector offset = point - (position + centerMass);
     Vector torque = produitVectoriel(offset, force) * 0.3;
     addTorque(torque);

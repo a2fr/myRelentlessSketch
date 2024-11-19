@@ -44,6 +44,9 @@ private:
     // Mouvement et vue du personnage
     ofEasyCam camera;
 
+    ofLight pointLight;
+    ofLight directionalLight;
+
     // Physics components
     PhysicsIntegrator physicsIntegrator; // Manages forces and updates on the rigid body
 

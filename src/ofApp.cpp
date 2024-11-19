@@ -12,6 +12,10 @@ float sensitivity = 0.1f; // Ajuste la sensibilite de la rotation
 glm::vec2 centerOfTheScreen;
 bool keys[6] = { false, false, false, false, false, false }; // W, A, S, D, R, F
 
+bool drawArrow = false;
+Vector collisionPoint;
+Vector direction;
+
 // Object that the user see in game
 CorpsRigide* currentObject;
 
@@ -34,6 +38,17 @@ void ofApp::setup() {
     camera.setNearClip(1.0f);
     centerOfTheScreen = glm::vec2(ofGetWidth() / 2, ofGetHeight() / 2);
     SetCursorPos(centerOfTheScreen.x, centerOfTheScreen.y); // Centre la souris au debut
+
+    // LIGHTS
+    ofSetSmoothLighting(true);
+    pointLight.setDiffuseColor(ofColor(246, 228, 188));
+    pointLight.setSpecularColor(ofColor(246, 228, 188));
+    pointLight.setPosition(0, 50, 0);
+    pointLight.setScale(1000);
+    directionalLight.setDiffuseColor(ofColor(246, 228, 188));
+    directionalLight.setSpecularColor(ofColor(246, 228, 188));
+    directionalLight.setPosition(0, 50, 0);
+    directionalLight.setOrientation(glm::vec3(45, 45, 45));
 
     // Initialize physics integrator and objects
     physicsIntegrator = PhysicsIntegrator();
@@ -118,6 +133,8 @@ void ofApp::updateGame() {
         currentObject->setAngularVelocity(Vector(0, 0, 0));
         currentObject->setVelocity(Vector(0, 0, 0));
     }
+
+    pointLight.setPosition(currentObject->getPosition().getGlmVec());
 }
 
 void ofApp::draw() {
@@ -155,6 +172,9 @@ void ofApp::drawNames() {
 // Draw the scene, including the box
 void ofApp::drawGame() {
     ofBackground(0);  // Fond noir
+    ofEnableDepthTest();
+    pointLight.enable();
+    directionalLight.enable();
     skybox.draw();
 
     returnButton->Draw();
@@ -170,14 +190,24 @@ void ofApp::drawGame() {
     ofDrawGrid(1, 1000, false, false, true, false);
 
     // Trace
-    ofSetColor(255, 0, 0);
+    ofSetColor(0, 0, 200);
     for (auto const& point : currentObject->trace) {
-        ofDrawSphere(point.getGlmVec(), 0.3);
+        ofDrawSphere(point.getGlmVec(), 0.2);
+    }
+
+    // Arrow
+    if (drawArrow) {
+        ofSetColor(255);
+        glm::vec3 end = collisionPoint.getGlmVec();
+        glm::vec3 start = end - direction.getGlmVec() * launchForce / 50;
+        ofDrawArrow(start, end, 0.5f);
     }
 
     // Draw the current object
     currentObject->draw();
 
+    pointLight.disable();
+    directionalLight.disable();
     camera.end();
 
     // CrossHair
@@ -226,6 +256,7 @@ void ofApp::resetBox() {
     currentObject->trace = vector<Vector>();
     // Reset launch force
     launchForce = 100.0f;
+    drawArrow = false;
 }
 
 // Reset the camera position and orientation
@@ -260,11 +291,14 @@ void ofApp::mousePressed(int x, int y, int button) {
         }
         else {
             // Calculate the direction of launch from the mouse position
-            Vector direction = (currentObject->getPosition() - Vector(camera.getPosition())).normalize();
+            direction = (currentObject->getPosition() - Vector(camera.getPosition())).normalize();
             Vector force = direction * launchForce;
 
+            collisionPoint = currentObject->getPosition() + direction;
+            drawArrow = true;
+
             // Apply the force at an offset from the center of mass
-            currentObject->applyForceAtPoint(force, currentObject->getPosition() + direction);
+            currentObject->applyForceAtPoint(force, collisionPoint);
         }
     }
 }
@@ -296,16 +330,13 @@ void ofApp::keyPressed(int key) {
             }
             break;
         case OF_KEY_RETURN:
-            cout << "Resetting box position and velocity." << endl;
             resetBox();
             resetCamera();
             break;
         case OF_KEY_UP:
-            cout << "Up key pressed" << endl;
             launchForce += 5.0f;
             break;
         case OF_KEY_DOWN:
-            cout << "Down key pressed" << endl;
             launchForce -= 5.0f;
             if (launchForce < 0) launchForce = 0;
             break;

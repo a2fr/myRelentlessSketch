@@ -10,8 +10,11 @@ Cylindre::Cylindre() {
     angularAcceleration = Vector(0, 0, 0);
     torqueAccum = Vector(0, 0, 0);
     setMass(1.0f);
-    centerMass = position;
+    centerMass = Vector(0, 1, 0.5);
     initInertiaTensor();
+    material.setShininess(64);
+    material.setDiffuseColor(ofColor(200, 0, 0, 150));
+    mesh.set(1, 2);
 }
 
 Cylindre::Cylindre(double mass) {
@@ -54,18 +57,21 @@ void Cylindre::initInertiaTensor() {
 }
 
 void Cylindre::draw() {
+    // Mesh
     ofPushMatrix();
     ofTranslate(getPosition().getGlmVec());
     ofMultMatrix(getOrientation().normalize().toMatrix4().toOfMatrix4x4());  // Apply the box's rotation
 
-    // Define the properties of the cylinder
-    float radius = 1.0f;
-    float height = 2.0f;
-    glm::vec3 baseCenter(0, -height / 2, 0);
-    ofColor color = ofColor::blue;
+    material.begin();
+    mesh.draw();
+    material.end();
 
-    // Draw the cylinder
-    drawCylinder(baseCenter, radius, height, color);
+    // centerMass
+    ofTranslate(centerMass.getGlmVec());
+
+    ofSetColor(0);
+    ofDrawSphere(0.1f);
+
     ofPopMatrix();
 }
 

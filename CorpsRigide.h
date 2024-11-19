@@ -1,6 +1,7 @@
 #ifndef CORPSRIGIDE_H
 #define CORPSRIGIDE_H
 
+#include "ofMain.h"
 #include "Vector.h"
 #include "Quaternion.h"
 #include <vector>
@@ -31,6 +32,8 @@ public:
     int maxPointsInTrace = 20;
     int countTrace = 0;
     bool isGravityActivated = false;
+
+    ofMaterial material;
 
     void setMass(double m);
     void setCenterMass(const Vector& centerMass);

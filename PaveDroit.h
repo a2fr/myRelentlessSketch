@@ -6,6 +6,8 @@
 
 class PaveDroit : public CorpsRigide {
 public:
+    ofBoxPrimitive mesh;
+public:
     PaveDroit();
     PaveDroit(double mass);
     PaveDroit(const Vector& centerMass, double mass);

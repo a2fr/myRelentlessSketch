@@ -1,10 +1,11 @@
 #pragma once
 
 #include "CorpsRigide.h"
-#include "ofMain.h"
 #include "Matrix3.h"
 
 class Cube : public CorpsRigide {
+private:
+    ofBoxPrimitive mesh;
 public:
     Cube();
     Cube(double mass);

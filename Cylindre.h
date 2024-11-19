@@ -6,6 +6,8 @@
 
 class Cylindre : public CorpsRigide {
 public:
+    ofCylinderPrimitive mesh;
+public:
     Cylindre();
     Cylindre(double mass);
     Cylindre(const Vector& centerMass, double mass);
