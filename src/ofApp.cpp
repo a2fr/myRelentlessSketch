@@ -53,7 +53,7 @@ void ofApp::setup() {
     // Initialize physics integrator and objects
     physicsIntegrator = PhysicsIntegrator();
 
-    skybox.setup();
+    //skybox.setup();
 
     currentObject = &cube;
 }
@@ -171,11 +171,11 @@ void ofApp::drawNames() {
 
 // Draw the scene, including the box
 void ofApp::drawGame() {
-    ofBackground(0);  // Fond noir
+    ofBackground(100,100,200);  // Fond noir
     ofEnableDepthTest();
     pointLight.enable();
     directionalLight.enable();
-    skybox.draw();
+    //skybox.draw();
 
     returnButton->Draw();
     camera.begin();
