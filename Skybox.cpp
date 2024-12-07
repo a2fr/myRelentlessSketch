@@ -2,12 +2,12 @@
 
 void Skybox::setup() {
     // Charger les textures pour chaque face de la skybox
-    textures[0].load("skybox/clouds1_east.bmp");  // Face droite
-    textures[1].load("skybox/clouds1_west.bmp");  // Face gauche
-    textures[2].load("skybox/clouds1_up.bmp");    // Face haut
-    textures[3].load("skybox/clouds1_down.bmp");  // Face bas
-    textures[4].load("skybox/clouds1_north.bmp"); // Face avant
-    textures[5].load("skybox/clouds1_south.bmp"); // Face arrière
+    textures[0].load("skybox/clouds1_east.png");  // Face droite
+    textures[1].load("skybox/clouds1_west.png");  // Face gauche
+    textures[2].load("skybox/clouds1_up.png");    // Face haut
+    textures[3].load("skybox/clouds1_down.png");  // Face bas
+    textures[4].load("skybox/clouds1_north.png"); // Face avant
+    textures[5].load("skybox/clouds1_south.png"); // Face arrière
 
     // Initialiser le mesh d'un cube pour la skybox
     skyboxMesh.setMode(OF_PRIMITIVE_TRIANGLES);
