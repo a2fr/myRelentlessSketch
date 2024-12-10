@@ -13,7 +13,12 @@ public:
     Cylindre(const Vector& centerMass, double mass);
     void draw() override;
 
+    void updateBS() override;
+    const BoundingSphere& getBS() const override;
+
 private:
     void initInertiaTensor();
     void drawCylinder(const glm::vec3& baseCenter, float radius, float height, const ofColor& color);
+
+
 };

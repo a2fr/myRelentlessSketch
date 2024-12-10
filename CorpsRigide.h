@@ -6,6 +6,7 @@
 #include "Quaternion.h"
 #include <vector>
 #include "Matrix3.h"
+#include "BoundingSphere.h"
 
 using namespace std;
 
@@ -31,9 +32,11 @@ public:
     float tracePeriode = 50;
     int maxPointsInTrace = 20;
     int countTrace = 0;
-    bool isGravityActivated = false;
+    bool isGravityActivated = true;
 
     ofMaterial material;
+
+    BoundingSphere boundingSphere;
 
     void setMass(double m);
     void setCenterMass(const Vector& centerMass);
@@ -48,6 +51,7 @@ public:
     Matrix3 getInverseInertia() const;
     const Vector& getPosition() const;
     const Quaternion& getOrientation() const;
+    const Vector getVelocity() const;
 
     void addForce(const Vector& force);
     void addTorque(const Vector& torque);
@@ -58,6 +62,9 @@ public:
     void applyTorque(const Vector& torque);
 
     virtual void draw() = 0;
+
+    virtual void updateBS() = 0;
+    virtual const BoundingSphere& getBS() const = 0;
 };
 
 #endif // CORPSRIGIDE_H

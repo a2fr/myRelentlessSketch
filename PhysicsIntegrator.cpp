@@ -42,6 +42,8 @@ void PhysicsIntegrator::update(CorpsRigide& corps, double duration) {
         corps.trace.push_back(Vector(corps.getPosition()));
     }
     corps.countTrace++;
+
+    corps.updateBS();
 }
 
 void PhysicsIntegrator::addForce(CorpsRigide* corps, const Vector& force) {

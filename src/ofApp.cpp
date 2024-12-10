@@ -16,9 +16,6 @@ bool drawArrow = false;
 Vector collisionPoint;
 Vector direction;
 
-// Object that the user see in game
-CorpsRigide* currentObject;
-
 // Setup the application window and scene
 void ofApp::setup() {
     titleFont.load("goodtimesrg.otf", 55);
@@ -50,12 +47,32 @@ void ofApp::setup() {
     directionalLight.setPosition(0, 50, 0);
     directionalLight.setOrientation(glm::vec3(45, 45, 45));
 
-    // Initialize physics integrator and objects
-    physicsIntegrator = PhysicsIntegrator();
+    world = new World();
+    Cube* cube1 = new Cube();
+    cube1->setPosition(Vector(0, 5, -20));
+    cube1->setVelocity(Vector(5, 0, 0));
+    Cube* cube2 = new Cube();
+    cube2->setPosition(Vector(10, 5, -20));
+    Cube* cube3 = new Cube();
+    cube3->setPosition(Vector(15, 5, -20));
+    Cube* cube4 = new Cube();
+    cube4->setPosition(Vector(-20, 5, -20));
+    Cube* cube5 = new Cube();
+    cube5->setPosition(Vector(-5, 10, -20));
+    Cube* cube6 = new Cube();
+    cube6->setPosition(Vector(-11, 15,-20));
+    Cube* cube7 = new Cube();
+    cube7->setPosition(Vector(-10, 20, -20));
+    cube7->setVelocity(Vector(0, -5, 0));
 
-    //skybox.setup();
+    world->addCorpsRigide(cube1);
+    world->addCorpsRigide(cube2);
+    world->addCorpsRigide(cube3);
+    world->addCorpsRigide(cube4);
+    world->addCorpsRigide(cube5);
+    world->addCorpsRigide(cube6);
+    world->addCorpsRigide(cube7);
 
-    currentObject = &cube;
 }
 
 
@@ -125,16 +142,10 @@ void ofApp::updateGame() {
         SetCursorPos(centerOfTheScreen.x, centerOfTheScreen.y);
 
     // Update physics simulation
-    physicsIntegrator.update(*currentObject, ofGetLastFrameTime());
 
-    // Check if the box goes out of bounds and reset it if necessary
-    if (currentObject->getPosition().y < 0) {
-        currentObject->setPosition(Vector(currentObject->getPosition().x, 0, currentObject->getPosition().z));
-        currentObject->setAngularVelocity(Vector(0, 0, 0));
-        currentObject->setVelocity(Vector(0, 0, 0));
-    }
+    world->update(ofGetLastFrameTime());
 
-    pointLight.setPosition(currentObject->getPosition().getGlmVec());
+    //pointLight.setPosition(sceneObject.at(0)->getPosition().getGlmVec());
 }
 
 void ofApp::draw() {
@@ -189,22 +200,7 @@ void ofApp::drawGame() {
     ofDrawBox(glm::vec3(0, yPos, 0), 500, 1, 500);
     ofDrawGrid(1, 1000, false, false, true, false);
 
-    // Trace
-    ofSetColor(0, 0, 200);
-    for (auto const& point : currentObject->trace) {
-        ofDrawSphere(point.getGlmVec(), 0.2);
-    }
-
-    // Arrow
-    if (drawArrow) {
-        ofSetColor(255);
-        glm::vec3 end = collisionPoint.getGlmVec();
-        glm::vec3 start = end - direction.getGlmVec() * launchForce / 50;
-        ofDrawArrow(start, end, 0.5f);
-    }
-
-    // Draw the current object
-    currentObject->draw();
+    world->draw();
 
     pointLight.disable();
     directionalLight.disable();
@@ -220,10 +216,6 @@ void ofApp::drawGame() {
     // Draw the launch force value on the screen
     ofSetColor(ofColor::white);
     std::string text;
-    text = "Launch Force: " + std::to_string(launchForce);
-    launchForceFont.drawString(text, 20, 20);
-    text = "ENTRER - reset the cube";
-    controlsFont.drawString(text, 20, 50);
     text = "W - move forward";
     controlsFont.drawString(text, 20, 65);
     text = "S - move backward";
@@ -238,25 +230,6 @@ void ofApp::drawGame() {
     controlsFont.drawString(text, 20, 140);
     text = "Q - focus / unfocus";
     controlsFont.drawString(text, 20, 155);
-    text = "J - switch to Cube";
-    controlsFont.drawString(text, 20, 170);
-    text = "K - switch to Cylindre";
-    controlsFont.drawString(text, 20, 185);
-    text = "L - switch to PaveDroit";
-    controlsFont.drawString(text, 20, 200);
-}
-
-// Reset the box position and velocity when it goes out of bounds
-void ofApp::resetBox() {
-    currentObject->setPosition(Vector(0, 5, 0));         // Reset position
-    currentObject->setVelocity(Vector(0, 0, 0));         // Reset velocity
-    currentObject->setAngularVelocity(Vector(0, 0, 0));  // Reset angular velocity
-    currentObject->orientation = Quaternion(1, 0, 0, 0);
-    currentObject->isGravityActivated = false;
-    currentObject->trace = vector<Vector>();
-    // Reset launch force
-    launchForce = 100.0f;
-    drawArrow = false;
 }
 
 // Reset the camera position and orientation
@@ -291,16 +264,28 @@ void ofApp::mousePressed(int x, int y, int button) {
         }
         else {
             // Calculate the direction of launch from the mouse position
-            direction = (currentObject->getPosition() - Vector(camera.getPosition())).normalize();
-            Vector force = direction * launchForce;
+        //    direction = (currentObject->getPosition() - Vector(camera.getPosition())).normalize();
+        //    Vector force = direction * launchForce;
 
-            collisionPoint = currentObject->getPosition() + direction;
-            drawArrow = true;
+        //    collisionPoint = currentObject->getPosition() + direction;
+        //    drawArrow = true;
 
-            // Apply the force at an offset from the center of mass
-            currentObject->applyForceAtPoint(force, collisionPoint);
+        //    // Apply the force at an offset from the center of mass
+        //    currentObject->applyForceAtPoint(force, collisionPoint);
         }
     }
+}
+
+void ofApp::resetBox() {
+    //currentObject->setPosition(Vector(0, 5, 0));         // Reset position
+    //currentObject->setVelocity(Vector(0, 0, 0));         // Reset velocity
+    //currentObject->setAngularVelocity(Vector(0, 0, 0));  // Reset angular velocity
+    //currentObject->orientation = Quaternion(1, 0, 0, 0);
+    //currentObject->isGravityActivated = false;
+    //currentObject->trace = vector<Vector>();
+    //// Reset launch force
+    //launchForce = 100.0f;
+    //drawArrow = false;
 }
 
 // Handle key presses for resetting or adjusting launch force
@@ -340,15 +325,6 @@ void ofApp::keyPressed(int key) {
             launchForce -= 5.0f;
             if (launchForce < 0) launchForce = 0;
             break;
-        case 'j':
-            currentObject = &cube;
-            break;
-        case 'k':
-            currentObject = &cylindre;
-            break;
-        case 'l':
-            currentObject = &paveDroit;
-            break;
         }
     }
 }
@@ -361,3 +337,5 @@ void ofApp::keyReleased(int key) {
     if (key == 'r') keys[4] = false;
     if (key == 'f') keys[5] = false;
 }
+
+

@@ -15,6 +15,8 @@ PaveDroit::PaveDroit() {
     material.setShininess(64);
     material.setDiffuseColor(ofColor(200, 0, 0, 150));
     mesh.set(2.0f, 1.0f, 1.0f);
+    updateBS();
+    boundingSphere.setOwner(this);
 }
 
 PaveDroit::PaveDroit(double mass) {
@@ -29,6 +31,8 @@ PaveDroit::PaveDroit(double mass) {
     setMass(mass);
     centerMass = position;
     initInertiaTensor();
+    updateBS();
+    boundingSphere.setOwner(this);
 }
 
 PaveDroit::PaveDroit(const Vector& centerMass, double mass) {
@@ -43,6 +47,8 @@ PaveDroit::PaveDroit(const Vector& centerMass, double mass) {
     setMass(mass);
     this->centerMass = centerMass;
     initInertiaTensor();
+    updateBS();
+    boundingSphere.setOwner(this);
 }
 
 void PaveDroit::initInertiaTensor() {
@@ -75,6 +81,13 @@ void PaveDroit::draw() {
     ofDrawSphere(0.1f);
 
     ofPopMatrix();
+
+    // Draw Bounding Sphere
+    ofPushMatrix();
+    ofSetColor(255, 0, 0, 100);  // Semi-transparent red
+    ofNoFill();
+    ofDrawSphere(boundingSphere.getCenter().getGlmVec(), boundingSphere.getRadius());
+    ofPopMatrix();
 }
 
 void PaveDroit::drawFace(const glm::vec3 vertices[4], const ofColor& color) {
@@ -85,4 +98,21 @@ void PaveDroit::drawFace(const glm::vec3 vertices[4], const ofColor& color) {
         ofVertex(vertices[j]);
     }
     ofEndShape(true);
+}
+
+void PaveDroit::updateBS() {
+    // Dimensions du pavé droit
+    float length = 2.0f; // Longueur (x)
+    float width = 1.0f;  // Largeur (z)
+    float height = 1.5f; // Hauteur (y)
+
+    // Le rayon de la Bounding Sphere est la distance du centre à un sommet
+    float bsRadius = 0.5f * sqrt(length * length + width * width + height * height);
+
+    boundingSphere.setCenter(position);
+    boundingSphere.setRadius(bsRadius);
+}
+
+const BoundingSphere& PaveDroit::getBS() const {
+    return boundingSphere;
 }

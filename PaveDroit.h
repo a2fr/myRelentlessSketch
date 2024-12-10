@@ -13,7 +13,11 @@ public:
     PaveDroit(const Vector& centerMass, double mass);
     void draw() override;
 
+
+    void updateBS() override;
+    const BoundingSphere& getBS() const override;
 private:
     void initInertiaTensor();
     void drawFace(const glm::vec3 vertices[4], const ofColor& color);
+
 };

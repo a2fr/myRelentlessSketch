@@ -19,6 +19,7 @@ void CorpsRigide::setInertia(double i) {
 
 void CorpsRigide::setPosition(const Vector& pos) {
     position = pos;
+    boundingSphere.setCenter(pos);
 }
 
 void CorpsRigide::setInertiaTensor(const Matrix3& inertiaTensor) {
@@ -57,6 +58,11 @@ const Vector& CorpsRigide::getPosition() const {
 
 const Quaternion& CorpsRigide::getOrientation() const {
     return orientation;
+}
+
+const Vector CorpsRigide::getVelocity() const
+{
+    return velocity;
 }
 
 void CorpsRigide::addForce(const Vector& force) {

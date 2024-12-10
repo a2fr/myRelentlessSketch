@@ -15,6 +15,8 @@ Cube::Cube(){
     material.setShininess(64);
     material.setDiffuseColor(ofColor(200, 0, 0, 150));
     mesh.set(2.0f);
+    updateBS();
+    boundingSphere.setOwner(this);
 }
 
 Cube::Cube(double mass){
@@ -29,6 +31,8 @@ Cube::Cube(double mass){
     setMass(mass);
     centerMass = Vector(0, 0, 0);
     initInertiaTensor();
+    updateBS();
+    boundingSphere.setOwner(this);
 }
 
 Cube::Cube(const Vector& centerMass, double mass){
@@ -43,6 +47,8 @@ Cube::Cube(const Vector& centerMass, double mass){
     setMass(mass);
     this->centerMass = centerMass;
     initInertiaTensor();
+    updateBS();
+    boundingSphere.setOwner(this);
 }
 
 void Cube::initInertiaTensor() {
@@ -73,6 +79,13 @@ void Cube::draw() {
     ofDrawSphere(0.1f);
 
     ofPopMatrix();
+
+    // Draw Bounding Sphere
+    ofPushMatrix();
+    ofSetColor(0, 255, 0, 100);  // Semi-transparent green
+    ofNoFill();
+    ofDrawSphere(boundingSphere.getCenter().getGlmVec(), boundingSphere.getRadius());
+    ofPopMatrix();
 }
 
 void Cube::drawFace(const glm::vec3 vertices[4], const ofColor& color) {
@@ -83,4 +96,23 @@ void Cube::drawFace(const glm::vec3 vertices[4], const ofColor& color) {
         ofVertex(vertices[j]);
     }
     ofEndShape(true);
+}
+
+
+void Cube::updateBS() {
+    // Les dimensions du cube (un côté du cube fait 2 unités dans cet exemple)
+    float sideLength = 2.0f;
+
+    // Calcule les coins minimal et maximal de la boîte
+    glm::vec3 halfDimensions = glm::vec3(sideLength * 0.5f);
+    glm::vec3 boxMin = position.getGlmVec() - halfDimensions;
+    glm::vec3 boxMax = position.getGlmVec() + halfDimensions;
+
+    // Met à jour la sphère englobante en fonction de la boîte
+    boundingSphere.computeFromBox(boxMin, boxMax, position);
+
+}
+
+const BoundingSphere& Cube::getBS() const {
+    return boundingSphere;
 }

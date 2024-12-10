@@ -1,12 +1,13 @@
 #pragma once
 
 #include "ofMain.h"
+#include "..\CorpsRigide.h"  
 #include "..\PhysicsIntegrator.h"   // The physics integrator for handling forces
 #include "..\Button.h"
-#include "..\Skybox.h"
 #include "..\Cube.h"
 #include "..\Cylindre.h"
 #include "..\PaveDroit.h"
+#include "..\World.h"
 
 enum GameState {
     MENU,
@@ -47,9 +48,6 @@ private:
     ofLight pointLight;
     ofLight directionalLight;
 
-    // Physics components
-    PhysicsIntegrator physicsIntegrator; // Manages forces and updates on the rigid body
-
     // Helper methods
     void resetBox();                  // Reset the box's position and rotation
     void resetCamera();               // Reset the camera position and orientation
@@ -57,8 +55,5 @@ private:
     // Game parameters
     float launchForce = 200;                // Magnitude of the launch force
 
-    Skybox skybox;
-    Cube& cube = Cube();
-    Cylindre& cylindre = Cylindre();
-    PaveDroit& paveDroit = PaveDroit();
+    World* world;
 };

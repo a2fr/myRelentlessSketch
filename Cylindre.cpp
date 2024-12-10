@@ -15,6 +15,8 @@ Cylindre::Cylindre() {
     material.setShininess(64);
     material.setDiffuseColor(ofColor(200, 0, 0, 150));
     mesh.set(1, 2);
+    updateBS();
+    boundingSphere.setOwner(this);
 }
 
 Cylindre::Cylindre(double mass) {
@@ -29,6 +31,8 @@ Cylindre::Cylindre(double mass) {
     setMass(mass);
     centerMass = position;
     initInertiaTensor();
+    updateBS();
+    boundingSphere.setOwner(this);
 }
 
 Cylindre::Cylindre(const Vector& centerMass, double mass) {
@@ -43,6 +47,8 @@ Cylindre::Cylindre(const Vector& centerMass, double mass) {
     setMass(mass);
     this->centerMass = centerMass;
     initInertiaTensor();
+    updateBS();
+    boundingSphere.setOwner(this);
 }
 
 void Cylindre::initInertiaTensor() {
@@ -72,6 +78,13 @@ void Cylindre::draw() {
     ofSetColor(0);
     ofDrawSphere(0.1f);
 
+    ofPopMatrix();
+
+    // Draw Bounding Sphere
+    ofPushMatrix();
+    ofSetColor(0, 0, 255, 100);  // Semi-transparent blue
+    ofNoFill();
+    ofDrawSphere(boundingSphere.getCenter().getGlmVec(), boundingSphere.getRadius());
     ofPopMatrix();
 }
 
@@ -107,4 +120,21 @@ void Cylindre::drawCylinder(const glm::vec3& baseCenter, float radius, float hei
         ofVertex(topPoint);
     }
     ofEndShape();
+}
+
+
+void Cylindre::updateBS() {
+    // La Bounding Sphere est définie avec son centre à la position actuelle et son rayon
+    float radius = 1.0f; // Rayon du cylindre 
+    float height = 2.0f; // Hauteur du cylindre
+
+    // Le rayon de la Bounding Sphere est la distance entre le centre et le point le plus éloigné
+    float bsRadius = sqrt(radius * radius + (height / 2) * (height / 2));
+
+    boundingSphere.setCenter(position);
+    boundingSphere.setRadius(bsRadius);
+}
+
+const BoundingSphere& Cylindre::getBS() const {
+    return boundingSphere;
 }
